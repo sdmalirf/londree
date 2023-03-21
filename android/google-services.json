@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "308782549397",
+    "project_id": "londree-75feb",
+    "storage_bucket": "londree-75feb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308782549397:android:c63fa2aa03357139c9ce9c",
+        "android_client_info": {
+          "package_name": "com.example.londreeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "308782549397-jogp99b6c2e8685sf3816k6g2tdii3c4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.londreeapp",
+            "certificate_hash": "7fae26a9525bf7aace592bbef7c9f537426d4d5f"
+          }
+        },
+        {
+          "client_id": "308782549397-h4ali6vhcj5nsss9oam2j2clisonbo01.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQvmic-fWjfF9KjXJ4sQwr_nqY_mIr5Hk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "308782549397-h4ali6vhcj5nsss9oam2j2clisonbo01.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "308782549397-5u7t5mpd1gf9v300ars7ohojujku60bs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.londreeapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
