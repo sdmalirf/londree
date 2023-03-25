@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TextInputCustom extends StatefulWidget {
   String? hint;
   String? title;
-  static bool? obscure = false;
+  bool? obscure;
   Function(String?)? onSave;
   TextEditingController? controller = TextEditingController();
 
@@ -11,7 +11,7 @@ class TextInputCustom extends StatefulWidget {
       {super.key,
       this.hint,
       this.title,
-      obscure,
+      this.obscure,
       this.controller,
       this.onSave});
 
@@ -38,14 +38,14 @@ class _TextInputCustomState extends State<TextInputCustom> {
             ),
             TextFormField(
               onSaved: widget.onSave,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-              controller: widget.controller,
-              obscureText: TextInputCustom.obscure!,
+              // validator: (value) {
+              //   if (value!.isEmpty) {
+              //     return 'Please enter some text';
+              //   }
+              //   return null;
+              // },
+              controller: widget.controller!,
+              obscureText: widget.obscure!,
               decoration: InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20, vertical: 10),

@@ -21,6 +21,8 @@ dependencies:
   firebase_auth: ^4.2.9
   cloud_firestore: ^4.4.3
   flutter_riverpod: ^2.0.2
+  smart_snackbars: ^1.0.0
+  hexcolor: ^3.0.1
 
 
 

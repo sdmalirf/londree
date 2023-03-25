@@ -1,18 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:londreeapp/controller/transaction_controller.dart';
+import 'package:londreeapp/model/transactions.dart';
 import 'package:londreeapp/view/component/bottom_navbar.dart';
 import 'package:londreeapp/view/component/favorite_box.dart';
 import 'package:londreeapp/view/component/future_box.dart';
 import 'package:londreeapp/view/component/paged_table.dart';
+import 'package:londreeapp/view/component/table.dart';
 
-class home extends StatefulWidget {
+class home extends ConsumerStatefulWidget {
   const home({super.key});
 
   @override
-  State<home> createState() => _homeState();
+  ConsumerState<home> createState() => _homeState();
 }
 
-class _homeState extends State<home> {
+class _homeState extends ConsumerState<home> {
+  bool selectedRow = false;
+  int? selectedRowIndex;
+  int? datapick;
+
+  bool isloading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getAllTransaksi();
+  }
+
+  // @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    getAllTransaksi();
+    loadData();
+  }
+
+  List<Transactions> transaksiResult = [];
+
+  Future<void> getAllTransaksi() async {
+    await ref.read(transactionControllerProvider.notifier).getTransaction();
+  }
+
+  Future loadData() async {
+    setState(() {
+      isloading = true;
+    });
+
+    await Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        if (mounted) {
+          setState(() {
+            isloading = false;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final pages = List.generate(6, (index) => const favoriteBox());
@@ -141,7 +188,128 @@ class _homeState extends State<home> {
                         child: Text("Semua pesanan"))
                   ],
                 ),
-                tableData2(),
+                DataTransaksi()
+
+                // Expanded(
+                //     child: StreamBuilder<List<Transactions>>(
+                //   stream:
+                //       ref.watch(transactionControllerProvider.notifier).stream,
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasData) {
+                //       transaksiResult = snapshot.data!;
+                //       return DataTable(
+                //           showCheckboxColumn: false,
+                //           columnSpacing: 45.0,
+                //           dataRowHeight: 30,
+                //           dataTextStyle: TextStyle(
+                //               overflow: TextOverflow.ellipsis,
+                //               color: Colors.black),
+                //           headingRowHeight: 35,
+                //           decoration: BoxDecoration(
+                //               border: Border.all(
+                //                   width: 3,
+                //                   color: Color.fromARGB(255, 212, 212, 212)),
+                //               borderRadius: BorderRadius.circular(10)),
+                //           columns: [
+                //             DataColumn(
+                //               label: Expanded(
+                //                 child: Text(
+                //                   'Nama',
+                //                   style: TextStyle(fontStyle: FontStyle.italic),
+                //                 ),
+                //               ),
+                //             ),
+                //             DataColumn(
+                //               label: Expanded(
+                //                 child: Text(
+                //                   'Berat',
+                //                   style: TextStyle(fontStyle: FontStyle.italic),
+                //                 ),
+                //               ),
+                //             ),
+                //             DataColumn(
+                //               label: Expanded(
+                //                 child: Text(
+                //                   'Total',
+                //                   style: TextStyle(fontStyle: FontStyle.italic),
+                //                 ),
+                //               ),
+                //             ),
+                //             DataColumn(
+                //               label: Expanded(
+                //                 child: Text(
+                //                   'Tanggal',
+                //                   style: TextStyle(fontStyle: FontStyle.italic),
+                //                 ),
+                //               ),
+                //             ),
+                //           ],
+                //           rows: [
+                //             ...transaksiResult.asMap().entries.map((entry) {
+                //               final rowIndex = entry.key;
+                //               final data = entry.value;
+
+                //               return DataRow(
+                //                 selected: selectedRowIndex == rowIndex,
+                //                 onSelectChanged: (value) {
+                //                   setState(() {
+                //                     // widget.data = transaksiResult[rowIndex];
+                //                     // print(data.nama);
+                //                     // print(data.berat);
+                //                     selectedRow = value!;
+                //                     selectedRowIndex = rowIndex;
+                //                   });
+                //                 },
+                //                 cells: <DataCell>[
+                //                   DataCell(
+                //                     SizedBox(
+                //                         width: 50,
+                //                         child: Text(data.nama.toString())),
+                //                   ),
+                //                   DataCell(
+                //                     SizedBox(
+                //                         width: 40,
+                //                         child: Text(data.berat.toString())),
+                //                   ),
+                //                   DataCell(
+                //                     SizedBox(
+                //                         width: 30,
+                //                         child: Text(data.total.toString())),
+                //                   ),
+                //                   DataCell(
+                //                     SizedBox(
+                //                         width: 50,
+                //                         child: Text(
+                //                           "nama",
+                //                           style: TextStyle(color: Colors.black),
+                //                         )),
+                //                   ),
+                //                 ],
+                //               );
+                //             }),
+                //           ]
+
+                //           // DataRow(
+                //           //   selected: false,
+                //           //   cells: <DataCell>[
+                //           //     DataCell(
+                //           //       SizedBox(
+                //           //           width: 40,
+                //           //           child: Text(
+                //           //             "Sadam Ali Rafsanjani",
+                //           //             style: TextStyle(overflow: TextOverflow.ellipsis),
+                //           //           )),
+                //           //     ),
+                //           //   ],
+                //           // ),
+                //           );
+
+                //       ;
+                //     } else {
+                //       return Center(child: CircularProgressIndicator());
+                //     }
+                //   },
+                // )),
               ],
             ),
           ),

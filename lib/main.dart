@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:londreeapp/view/started/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 // Import the generated file
@@ -7,7 +8,7 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(App());
+  runApp(ProviderScope(child: App()));
 }
 
 class App extends StatelessWidget {

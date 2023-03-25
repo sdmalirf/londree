@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:londreeapp/controller/table_controller.dart';
+import 'package:londreeapp/controller/transaction_controller.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
 import 'package:londreeapp/view/component/hero_container.dart';
 import 'package:londreeapp/view/started/login.dart';
-import 'package:londreeapp/view/started/register.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class started extends StatefulWidget {
@@ -150,11 +149,11 @@ class _startedState extends State<started> {
                   color: Colors.blue,
                   textcolor: Colors.white,
                   press: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => register(),
-                        ));
+                    // Navigator.pushReplacement(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => register(),
+                    //     ));
                   },
                 ),
               ),

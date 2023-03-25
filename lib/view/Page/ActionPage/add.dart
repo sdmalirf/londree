@@ -1,27 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:londreeapp/controller/table_controller.dart';
+import 'package:londreeapp/controller/transaction_controller.dart';
+import 'package:londreeapp/model/transactions.dart';
+import 'package:londreeapp/view/component/bottom_navbar.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
+import 'package:londreeapp/view/component/snackbar.dart';
 import 'package:londreeapp/view/component/text_input.dart';
 
-class addPage extends StatefulWidget {
+class addPage extends ConsumerStatefulWidget {
   const addPage({super.key});
 
   @override
-  State<addPage> createState() => _addPageState();
+  ConsumerState<addPage> createState() => _addPageState();
 }
 
-class _addPageState extends State<addPage> {
-  final TableController _tableController = TableController();
+class _addPageState extends ConsumerState<addPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final FirebaseFirestore _auth = FirebaseFirestore.instance;
+  final TextEditingController _nama = TextEditingController();
+  final TextEditingController _berat = TextEditingController();
+  final TextEditingController _total = TextEditingController();
 
-  String _nama = '';
-  String _berat = '';
-  String _total = '';
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nama.dispose();
+    _berat.dispose();
+    _total.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,27 +57,87 @@ class _addPageState extends State<addPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextInputCustom(
-                      title: "Nama Pelanggan",
-                      onSave: (value) {
-                        _nama = value!;
-                      },
-                    ),
-                    TextInputCustom(
-                      title: "berat",
-                      onSave: (value) {
-                        _berat = value!;
-                      },
-                    ),
-                    TextInputCustom(
-                      title: "total",
-                      onSave: (value) {
-                        _total = value!;
-                      },
-                    ),
-                    TextInputCustom(
-                      title: "Nomor Telepon",
-                    ),
+                    Container(
+                        margin: EdgeInsets.only(top: 25),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 12),
+                              child: Text(
+                                'nama',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            TextFormField(
+                              controller: _nama,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  border: OutlineInputBorder(),
+                                  hintText: 'nama'),
+                            )
+                          ],
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(top: 25),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 12),
+                              child: Text(
+                                'berat',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            TextFormField(
+                              controller: _berat,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  border: OutlineInputBorder(),
+                                  hintText: 'berat'),
+                            )
+                          ],
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(top: 25),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 12),
+                              child: Text(
+                                'total',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            TextFormField(
+                              controller: _total,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  border: OutlineInputBorder(),
+                                  hintText: 'total'),
+                            )
+                          ],
+                        )),
+                    // TextInputCustom(
+                    //   title: "Nama Pelanggan",
+                    //   controller: _nama,
+                    // ),
+                    // TextInputCustom(
+                    //   title: "berat",
+                    //   controller: _berat,
+                    // ),
+                    // TextInputCustom(
+                    //   title: "total",
+                    //   controller: _total,
+                    // ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 20)),
                     Row(
                       children: [
@@ -75,25 +150,36 @@ class _addPageState extends State<addPage> {
                         ),
                         Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
                         Expanded(
-                          child: customButton(
-                            title: "Ubah",
-                            color: Colors.blue,
-                            textcolor: Colors.white,
-                            press: () {
-                              // _tableController.addTrans();
-                            },
-                            // press: () async {
-                            //   try {
-                            //     await _tableController.uploadingData(
-                            //         "idTrans", "nama", "berat", "total");
-                            //     // kode selanjutnya setelah berhasil mengunggah data
-                            //   } catch (e) {
-                            //     print('Error uploading data: $e');
-                            //     // kode untuk menangani error
-                            //   }
-                            // },
-                          ),
-                        )
+                            child: customButton(
+                          title: "Tambah",
+                          color: Colors.blue,
+                          textcolor: Colors.white,
+                          press: () async {
+                            try {
+                              Transactions transaction = Transactions(
+                                  nama: _nama.text,
+                                  berat: _berat.text,
+                                  total: _total.text);
+                              await ref
+                                  .read(transactionControllerProvider.notifier)
+                                  .addTransaction(
+                                      context: context,
+                                      transactions: transaction);
+                              setState(() {});
+                              if (!mounted) return;
+                              Snackbars().successSnackbars(context, 'Berhasil',
+                                  'Berhasil Menambah Siswa');
+                              Navigator.pop(context);
+                              // Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => bottomNavbar()));
+                            } on FirebaseException catch (e) {
+                              Snackbars().failedSnackbars(
+                                  context, 'Gagal', e.message.toString());
+                            }
+                          },
+                        ))
                       ],
                     )
                   ],

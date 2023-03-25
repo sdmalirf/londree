@@ -4,64 +4,30 @@ import 'package:londreeapp/view/Page/home.dart';
 import 'package:londreeapp/view/component/bottom_navbar.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
 import 'package:londreeapp/view/component/text_input.dart';
-import 'package:londreeapp/controller/auth.dart';
+import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
-class login extends StatefulWidget {
+class login extends ConsumerStatefulWidget {
   login({super.key});
 
   @override
-  State<login> createState() => _loginState();
+  ConsumerState<login> createState() => _loginState();
 }
 
-class _loginState extends State<login> {
+class _loginState extends ConsumerState<login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  bool passenable = true;
   bool _isLoading = false;
-  final AuthController _auth = AuthController();
 
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      try {
-        _formKey.currentState!.save();
-        _auth.signIn(context, _emailController, _passwordController);
-        // call the signUp()
-        // UserCredential userCredential = await _authController.signIn(
-        //     _emailController.text, _passwordController.text);
-        // print('Signed in as: ${userCredential.user!.email}');
-        // Navigator.pushReplacement(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => bottomNavbar(),
-        //     ));
-        // } on FirebaseAuthException catch (e) {
-        //   if (e.code == 'user-not-found') {
-        //     print('No user found for that email.');
-        //   } else if (e.code == 'wrong-password') {
-        //     print('Wrong password provided for that user.');
-        //   }
-        //   ScaffoldMessenger.of(context)
-        //       .showSnackBar(SnackBar(content: Text('Login failed: $e')));
-        // } catch (e) {
-        //   ScaffoldMessenger.of(context)
-        //       .showSnackBar(SnackBar(content: Text('Login failed: $e')));
-      } finally {
-        setState(() {
-          _isLoading = false;
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => bottomNavbar(),
-              ));
-        });
-      }
-    }
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
   }
 
   @override
@@ -89,7 +55,7 @@ class _loginState extends State<login> {
                 children: [
                   Container(
                     child: TextInputCustom(
-                      controller: _emailController,
+                      controller: _email,
                       hint: "sadamalirafsanjani@gmail.com",
                       title: "Masukan Email",
                       obscure: false,
@@ -97,10 +63,10 @@ class _loginState extends State<login> {
                   ),
                   Container(
                       child: TextInputCustom(
-                    controller: _passwordController,
+                    controller: _password,
                     hint: "Password",
                     title: "Masukan Sandi",
-                    obscure: true,
+                    obscure: passenable,
                   )),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -120,27 +86,17 @@ class _loginState extends State<login> {
                       title: "Masuk",
                       color: Colors.blue,
                       textcolor: Colors.white,
-                      press: _submitForm,
-                      // press: () async {
-                      //   await _authController.signIn(context);
-                      // },
+                      press: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await ref
+                              .read(authControllerProvider.notifier)
+                              .signIn(context, _email.text, _password.text);
 
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => home(),
-                      //     ));
-                      // if (FirebaseAuth.instance.currentUser != null) {
-                      //   print(login());
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => home(),
-                      //       ));
-                      // } else {
-                      //   print("object");
-                      // }
-                      // ;
+                          _password.clear();
+                          setState(() {});
+                          if (!mounted) return;
+                        }
+                      },
                     ),
                   )
                 ],
