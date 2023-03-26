@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
 import 'package:londreeapp/model/transactions.dart';
 import 'package:paged_datatable/paged_datatable.dart';
@@ -18,33 +19,26 @@ class _DataTransaksiState extends ConsumerState<DataTransaksi> {
   @override
   void initState() {
     super.initState();
-    getAllTransaksi();
-    _getTransactions();
+    final users = ref.read(authControllerProvider);
+    getAllTransaksi(users.uid!);
   }
 
   // @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    getAllTransaksi();
-    loadData();
-    _getTransactions();
-  }
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   super.didChangeDependencies();
+  //   final users = ref.read(authControllerProvider);
+  //   getAllTransaksi(users.uid!);
+  //   loadData();
+  // }
 
   List<Transactions> transaksiResult = [];
 
-  Future<void> _getTransactions() async {
-    final QuerySnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance.collection('transactions').get();
-    setState(() {
-      transaksiResult = snapshot.docs
-          .map((doc) => Transactions.fromJson(doc.data()))
-          .toList();
-    });
-  }
-
-  Future<void> getAllTransaksi() async {
-    await ref.read(transactionControllerProvider.notifier).getTransaction();
+  Future<void> getAllTransaksi(String uid) async {
+    final users = ref.watch(authControllerProvider);
+    await ref
+        .read(transactionControllerProvider.notifier)
+        .getTransaction(uid: users.uid!);
   }
 
   Future loadData() async {
@@ -71,6 +65,8 @@ class _DataTransaksiState extends ConsumerState<DataTransaksi> {
 
   @override
   Widget build(BuildContext context) {
+    final users = ref.watch(authControllerProvider);
+
     return StreamBuilder<List<Transactions>>(
       stream: ref.watch(transactionControllerProvider.notifier).stream,
       builder: (context, snapshot) {
@@ -121,7 +117,11 @@ class _DataTransaksiState extends ConsumerState<DataTransaksi> {
                 ),
               ],
               rows: [
-                ...transaksiResult.take(5).map((data) {
+                ...transaksiResult
+                    .take(5)
+                    .where((element) =>
+                        element.tid == 'x5yLO0N6s5TVO9tjmJe0dUASyiH2')
+                    .map((data) {
                   return DataRow(
                     selected: false,
                     cells: <DataCell>[
@@ -161,8 +161,6 @@ class _DataTransaksiState extends ConsumerState<DataTransaksi> {
               //   ],
               // ),
               );
-
-          ;
         } else {
           return Center(child: CircularProgressIndicator());
         }

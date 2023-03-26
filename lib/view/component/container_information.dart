@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:londreeapp/controller/outlet_controller.dart';
 import 'package:londreeapp/view/component/information_box.dart';
 
-class informationContainer extends StatefulWidget {
+class informationContainer extends ConsumerStatefulWidget {
   const informationContainer({super.key});
 
   @override
-  State<informationContainer> createState() => _informationContainerState();
+  ConsumerState<informationContainer> createState() =>
+      _informationContainerState();
 }
 
-class _informationContainerState extends State<informationContainer> {
+class _informationContainerState extends ConsumerState<informationContainer> {
   @override
   Widget build(BuildContext context) {
+    final cabang = ref.watch(OutletControllerProvider);
     return Stack(children: [
       Positioned(
           child: Container(
@@ -47,7 +51,7 @@ class _informationContainerState extends State<informationContainer> {
                     label: "Cabang",
                     picture: "assets/images/store-icon.svg",
                     desc: "",
-                    desc2: "50"),
+                    desc2: cabang.length.toString()),
               ],
             ),
             Padding(padding: EdgeInsets.symmetric(horizontal: 0)),

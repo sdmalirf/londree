@@ -3,27 +3,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:londreeapp/model/transactions.dart';
+import 'package:londreeapp/model/members.dart';
+import 'package:londreeapp/model/outlets.dart';
 
-class TransactionsController extends StateNotifier<List<Transactions>> {
-  TransactionsController() : super([]);
+class MemberController extends StateNotifier<List<Members>> {
+  MemberController() : super([]);
 
-  final db = FirebaseFirestore.instance.collection('transactions');
+  final db = FirebaseFirestore.instance.collection('members');
 
-  Future<void> getTransaction({required String uid}) async {
-    var checkTransactions = await db.where('tid', isEqualTo: uid).get();
-    print(checkTransactions);
+  Future<void> getMembers() async {
+    var checkOutlets = await db.get();
 
-    List<Transactions> transactions = checkTransactions.docs
-        .map((e) => Transactions.fromJson(e.data()))
-        .toList();
-    state = transactions;
+    List<Members> members =
+        checkOutlets.docs.map((e) => Members.fromJson(e.data())).toList();
+    state = members;
   }
 
-  Future<void> addTransaction(
-      {required BuildContext context,
-      required Transactions transactions,
-      required String uid}) async {
+  Future<void> addMember(
+      {required BuildContext context, required Members member}) async {
     final doc = db.doc();
     showDialog(
         context: context,
@@ -33,7 +30,7 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
               ),
             ));
     Navigator.pop(context);
-    Transactions temp = transactions.copyWith(tid: doc.id);
+    Members temp = member.copyWith(mid: doc.id);
     await doc.set(temp.toJson());
 
     final auth = FirebaseAuth.instance;
@@ -46,15 +43,15 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     //   'tgl': DateTime.now(),
     // });
 
-    await getTransaction(uid: uid);
+    await getMembers();
   }
 
-  Future<void> updateTransaction(
+  Future<void> updateMember(
       {required BuildContext context,
-      required Transactions transactions,
-      required String tid}) async {
-    final doc = db.doc(tid);
-    Transactions temp = transactions.copyWith(tid: doc.id);
+      required Members members,
+      required String mid}) async {
+    final doc = db.doc(mid);
+    Members temp = members.copyWith(mid: doc.id);
     showDialog(
         context: context,
         builder: (context) => Center(
@@ -72,12 +69,12 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     //   'email': auth.currentUser!.email,
     //   'tgl': DateTime.now(),
     // });
-    await getTransaction(uid: tid);
+    await getMembers();
   }
 
-  Future<void> deleteTransaction(
-      {required BuildContext context, required String tid}) async {
-    final doc = db.doc(tid);
+  Future<void> deleteMember(
+      {required BuildContext context, required String mid}) async {
+    final doc = db.doc(mid);
     showDialog(
         context: context,
         builder: (context) => Center(
@@ -95,11 +92,11 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     //   'email': auth.currentUser!.email,
     //   'tgl': DateTime.now(),
     // });
-    await getTransaction(uid: tid);
+    await getMembers();
   }
 }
 
-final transactionControllerProvider =
-    StateNotifierProvider<TransactionsController, List<Transactions>>(
-  (ref) => TransactionsController(),
+final MemberControllerProvider =
+    StateNotifierProvider<MemberController, List<Members>>(
+  (ref) => MemberController(),
 );

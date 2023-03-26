@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/view/Page/home.dart';
 import 'package:londreeapp/view/component/bottom_navbar.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
-import 'package:londreeapp/view/component/text_input.dart';
+import 'package:londreeapp/view/component/custom_input.dart';
 import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,7 +42,11 @@ class _loginState extends ConsumerState<login> {
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
-            onPressed: () {},
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: SvgPicture.asset("assets/images/left-arrow-icon.svg")),
       ),
       body: ListView(
@@ -56,7 +60,7 @@ class _loginState extends ConsumerState<login> {
                   Container(
                     child: TextInputCustom(
                       controller: _email,
-                      hint: "sadamalirafsanjani@gmail.com",
+                      hint: "Email",
                       title: "Masukan Email",
                       obscure: false,
                     ),
@@ -105,13 +109,13 @@ class _loginState extends ConsumerState<login> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Belum punya akun?",
+                "",
                 style: TextStyle(fontSize: 16),
               ),
               TextButton(
                   onPressed: () {},
                   child: Text(
-                    "Daftar",
+                    "",
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.blue,

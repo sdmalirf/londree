@@ -1,7 +1,7 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:londreeapp/view/started/login.dart';
+import 'package:londreeapp/view/Page/auth/login.dart';
 
 class customButton extends StatelessWidget {
   final String title;

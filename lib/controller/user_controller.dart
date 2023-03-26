@@ -7,7 +7,10 @@ class UserController extends StateNotifier<List<Users>> {
   UserController() : super([]);
 
   Future<void> getDetailedUsersData({required String uid}) async {
-    var checkData = await FirebaseFirestore.instance.collection('users').get();
+    var checkData = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: uid)
+        .get();
 
     List<Users> user =
         checkData.docs.map((e) => Users.fromJson(e.data())).toList();

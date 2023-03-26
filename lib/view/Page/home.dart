@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
 import 'package:londreeapp/model/transactions.dart';
-import 'package:londreeapp/view/component/bottom_navbar.dart';
 import 'package:londreeapp/view/component/favorite_box.dart';
 import 'package:londreeapp/view/component/future_box.dart';
-import 'package:londreeapp/view/component/paged_table.dart';
-import 'package:londreeapp/view/component/table.dart';
 
 class home extends ConsumerStatefulWidget {
   const home({super.key});
@@ -23,13 +21,14 @@ class _homeState extends ConsumerState<home> {
 
   bool isloading = true;
 
-  @override
-  void initState() {
-    super.initState();
-    getAllTransaksi();
-  }
-
   // @override
+  // void initState() {
+  //   super.initState();
+  //   getAllTransaksi();
+  //   loadData();
+  // }
+
+  @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
@@ -40,7 +39,10 @@ class _homeState extends ConsumerState<home> {
   List<Transactions> transaksiResult = [];
 
   Future<void> getAllTransaksi() async {
-    await ref.read(transactionControllerProvider.notifier).getTransaction();
+    final users = ref.watch(authControllerProvider);
+    await ref
+        .read(transactionControllerProvider.notifier)
+        .getTransaction(uid: users.uid!);
   }
 
   Future loadData() async {
@@ -63,6 +65,7 @@ class _homeState extends ConsumerState<home> {
   @override
   Widget build(BuildContext context) {
     final pages = List.generate(6, (index) => const favoriteBox());
+    final users = ref.watch(authControllerProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -74,7 +77,12 @@ class _homeState extends ConsumerState<home> {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                await ref
+                    .read(authControllerProvider.notifier)
+                    .signOut(context);
+                setState(() {});
+              },
               icon: SvgPicture.asset("assets/images/notifications-icon.svg")),
           IconButton(
               onPressed: () {},
@@ -148,10 +156,6 @@ class _homeState extends ConsumerState<home> {
                       fontSize: 16,
                     ),
                   ),
-                  // RotatedBox(
-                  //   quarterTurns: 20,
-                  //   child: Expanded(child: Divider()),
-                  // )
                 ],
               ),
             ]),
@@ -188,128 +192,110 @@ class _homeState extends ConsumerState<home> {
                         child: Text("Semua pesanan"))
                   ],
                 ),
-                DataTransaksi()
+                StreamBuilder<List<Transactions>>(
+                  stream:
+                      ref.watch(transactionControllerProvider.notifier).stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      transaksiResult = snapshot.data!;
+                      return DataTable(
+                          columnSpacing: 45.0,
+                          dataRowHeight: 30,
+                          dataTextStyle: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: Colors.black),
+                          headingRowHeight: 35,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 3,
+                                  color: Color.fromARGB(255, 212, 212, 212)),
+                              borderRadius: BorderRadius.circular(10)),
+                          columns: [
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Nama',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Berat',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Total',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Tanggal',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                          ],
+                          rows: [
+                            ...transaksiResult.take(5).map((data) {
+                              return DataRow(
+                                selected: false,
+                                cells: <DataCell>[
+                                  DataCell(
+                                    SizedBox(
+                                        width: 50,
+                                        child: Text(data.nama.toString())),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                        width: 40,
+                                        child: Text(data.berat.toString())),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                        width: 30,
+                                        child: Text(data.total.toString())),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                        width: 50,
+                                        child: Text(
+                                          "nama",
+                                          style: TextStyle(color: Colors.black),
+                                        )),
+                                  ),
+                                ],
+                              );
+                            }),
+                          ]
 
-                // Expanded(
-                //     child: StreamBuilder<List<Transactions>>(
-                //   stream:
-                //       ref.watch(transactionControllerProvider.notifier).stream,
-                //   builder: (context, snapshot) {
-                //     if (snapshot.hasData) {
-                //       transaksiResult = snapshot.data!;
-                //       return DataTable(
-                //           showCheckboxColumn: false,
-                //           columnSpacing: 45.0,
-                //           dataRowHeight: 30,
-                //           dataTextStyle: TextStyle(
-                //               overflow: TextOverflow.ellipsis,
-                //               color: Colors.black),
-                //           headingRowHeight: 35,
-                //           decoration: BoxDecoration(
-                //               border: Border.all(
-                //                   width: 3,
-                //                   color: Color.fromARGB(255, 212, 212, 212)),
-                //               borderRadius: BorderRadius.circular(10)),
-                //           columns: [
-                //             DataColumn(
-                //               label: Expanded(
-                //                 child: Text(
-                //                   'Nama',
-                //                   style: TextStyle(fontStyle: FontStyle.italic),
-                //                 ),
-                //               ),
-                //             ),
-                //             DataColumn(
-                //               label: Expanded(
-                //                 child: Text(
-                //                   'Berat',
-                //                   style: TextStyle(fontStyle: FontStyle.italic),
-                //                 ),
-                //               ),
-                //             ),
-                //             DataColumn(
-                //               label: Expanded(
-                //                 child: Text(
-                //                   'Total',
-                //                   style: TextStyle(fontStyle: FontStyle.italic),
-                //                 ),
-                //               ),
-                //             ),
-                //             DataColumn(
-                //               label: Expanded(
-                //                 child: Text(
-                //                   'Tanggal',
-                //                   style: TextStyle(fontStyle: FontStyle.italic),
-                //                 ),
-                //               ),
-                //             ),
-                //           ],
-                //           rows: [
-                //             ...transaksiResult.asMap().entries.map((entry) {
-                //               final rowIndex = entry.key;
-                //               final data = entry.value;
-
-                //               return DataRow(
-                //                 selected: selectedRowIndex == rowIndex,
-                //                 onSelectChanged: (value) {
-                //                   setState(() {
-                //                     // widget.data = transaksiResult[rowIndex];
-                //                     // print(data.nama);
-                //                     // print(data.berat);
-                //                     selectedRow = value!;
-                //                     selectedRowIndex = rowIndex;
-                //                   });
-                //                 },
-                //                 cells: <DataCell>[
-                //                   DataCell(
-                //                     SizedBox(
-                //                         width: 50,
-                //                         child: Text(data.nama.toString())),
-                //                   ),
-                //                   DataCell(
-                //                     SizedBox(
-                //                         width: 40,
-                //                         child: Text(data.berat.toString())),
-                //                   ),
-                //                   DataCell(
-                //                     SizedBox(
-                //                         width: 30,
-                //                         child: Text(data.total.toString())),
-                //                   ),
-                //                   DataCell(
-                //                     SizedBox(
-                //                         width: 50,
-                //                         child: Text(
-                //                           "nama",
-                //                           style: TextStyle(color: Colors.black),
-                //                         )),
-                //                   ),
-                //                 ],
-                //               );
-                //             }),
-                //           ]
-
-                //           // DataRow(
-                //           //   selected: false,
-                //           //   cells: <DataCell>[
-                //           //     DataCell(
-                //           //       SizedBox(
-                //           //           width: 40,
-                //           //           child: Text(
-                //           //             "Sadam Ali Rafsanjani",
-                //           //             style: TextStyle(overflow: TextOverflow.ellipsis),
-                //           //           )),
-                //           //     ),
-                //           //   ],
-                //           // ),
-                //           );
-
-                //       ;
-                //     } else {
-                //       return Center(child: CircularProgressIndicator());
-                //     }
-                //   },
-                // )),
+                          // DataRow(
+                          //   selected: false,
+                          //   cells: <DataCell>[
+                          //     DataCell(
+                          //       SizedBox(
+                          //           width: 40,
+                          //           child: Text(
+                          //             "Sadam Ali Rafsanjani",
+                          //             style: TextStyle(overflow: TextOverflow.ellipsis),
+                          //           )),
+                          //     ),
+                          //   ],
+                          // ),
+                          );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                )
               ],
             ),
           ),
@@ -386,200 +372,6 @@ class _homeState extends ConsumerState<home> {
           )
         ],
       ),
-      //   body: Stack(children: [
-      //     Positioned(
-      //         top: 270,
-      //         child: Container(
-      //           width: 400,
-      //           height: 80,
-      //           decoration:
-      //               BoxDecoration(color: Color.fromARGB(255, 250, 250, 250)),
-      //         )),
-      //     ListView(
-      //         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-      //         children: [
-      //           Text(
-      //             "Seluruh Pendaftaran",
-      //             style: TextStyle(
-      //                 fontSize: 18,
-      //                 fontWeight: FontWeight.w500,
-      //                 color: Colors.black26),
-      //           ),
-      //           Padding(padding: EdgeInsets.only(top: 10)),
-      //           Row(
-      //             children: [
-      //               Text(
-      //                 "Rp",
-      //                 style: TextStyle(fontSize: 16),
-      //               ),
-      //               Padding(padding: EdgeInsets.only(right: 5)),
-      //               Text(
-      //                 "4.890.500",
-      //                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-      //               ),
-      //             ],
-      //           ),
-      //           Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-      //           Text(
-      //             "Pesanan Belum Diambil / Belum Selesai",
-      //             style: TextStyle(
-      //                 fontSize: 18,
-      //                 fontWeight: FontWeight.w500,
-      //                 color: Colors.black26),
-      //           ),
-      //           Padding(padding: EdgeInsets.only(top: 10)),
-      //           Row(children: [
-      //             Text(
-      //               "5",
-      //               style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-      //             ),
-      //             Padding(padding: EdgeInsets.only(right: 5)),
-      //             Text(
-      //               "Org",
-      //               style: TextStyle(
-      //                 fontSize: 16,
-      //               ),
-      //             ),
-      //             Text(
-      //               "/",
-      //               style: TextStyle(
-      //                   fontSize: 50,
-      //                   fontWeight: FontWeight.w300,
-      //                   color: Colors.black26),
-      //             ),
-      //             Text(
-      //               "5",
-      //               style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-      //             ),
-      //             Padding(padding: EdgeInsets.only(right: 5)),
-      //             Text(
-      //               "Org",
-      //               style: TextStyle(
-      //                 fontSize: 16,
-      //               ),
-      //             ),
-      //             // RotatedBox(
-      //             //   quarterTurns: 20,
-      //             //   child: Expanded(child: Divider()),
-      //             // )
-      //           ]),
-      //           Container(
-      //               margin: EdgeInsets.only(top: 30),
-      //               decoration: BoxDecoration(
-      //                 borderRadius: BorderRadius.circular(10),
-      //                 color: Color.fromARGB(255, 253, 254, 255),
-      //               ),
-      //               padding: EdgeInsetsDirectional.symmetric(
-      //                   horizontal: 8, vertical: 8),
-      //               child: Row(
-      //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //                 children: [
-      //                   Column(
-      //                     children: [
-      //                       IconButton(
-      //                           onPressed: () {},
-      //                           icon: SvgPicture.asset(
-      //                               "assets/images/store-icon.svg")),
-      //                       Text("Cabang")
-      //                     ],
-      //                   ),
-      //                   Column(
-      //                     children: [
-      //                       IconButton(
-      //                           onPressed: () {},
-      //                           icon: SvgPicture.asset(
-      //                               "assets/images/people-icon.svg")),
-      //                       Text("Pelanggan")
-      //                     ],
-      //                   ),
-      //                   Column(
-      //                     children: [
-      //                       IconButton(
-      //                           onPressed: () {},
-      //                           icon: SvgPicture.asset(
-      //                               "assets/images/box-icon.svg")),
-      //                       Text("Paket")
-      //                     ],
-      //                   ),
-      //                   Column(
-      //                     children: [
-      //                       IconButton(
-      //                           onPressed: () {},
-      //                           icon: SvgPicture.asset(
-      //                               "assets/images/bill-icon.svg")),
-      //                       Text("Transaksi")
-      //                     ],
-      //                   )
-      //                 ],
-      //               )),
-      //           Padding(padding: EdgeInsets.only(top: 50)),
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               Row(
-      //                 children: [
-      //                   SvgPicture.asset("assets/images/history-icon.svg"),
-      //                   Container(
-      //                     margin: EdgeInsets.only(left: 8),
-      //                     child: Text(
-      //                       "Pesanan Terakhir",
-      //                       style: TextStyle(
-      //                           fontSize: 15, fontWeight: FontWeight.w500),
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //               TextButton(
-      //                   onPressed: () {
-      //                     Navigator.pushReplacement(
-      //                         context,
-      //                         MaterialPageRoute(
-      //                           builder: (context) => home(),
-      //                         ));
-      //                   },
-      //                   child: Text("Semua pesanan"))
-      //             ],
-      //           ),
-      //         ]),
-      //     Stack(
-      //       children: [
-      //         Positioned(
-      //           top: 200,
-      //           child: Container(
-      //             color: Color.fromARGB(255, 250, 250, 250),
-      //             width: 400,
-      //             child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //               children: [
-      //                 Row(
-      //                   children: [
-      //                     SvgPicture.asset("assets/images/trophy-icon.svg"),
-      //                     Container(
-      //                       margin: EdgeInsets.only(left: 8),
-      //                       child: Text(
-      //                         "Outfit Terfavorit",
-      //                         style: TextStyle(
-      //                             fontSize: 15, fontWeight: FontWeight.w500),
-      //                       ),
-      //                     ),
-      //                   ],
-      //                 ),
-      //                 TextButton(
-      //                     onPressed: () {
-      //                       Navigator.pushReplacement(
-      //                           context,
-      //                           MaterialPageRoute(
-      //                             builder: (context) => home(),
-      //                           ));
-      //                     },
-      //                     child: Text("Semua pesanan")),
-      //               ],
-      //             ),
-      //           ),
-      //         ),
-      //       ],
-      //     )
-      //   ]),
     );
   }
 }

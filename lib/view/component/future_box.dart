@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:londreeapp/view/Page/member/member.dart';
+import 'package:londreeapp/view/Page/outlet/outlet.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 class futureBox extends StatefulWidget {
   const futureBox({super.key});
@@ -36,7 +39,10 @@ class _futureBoxState extends State<futureBox> {
                 Column(
                   children: [
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          pushNewScreen(context,
+                              screen: outletPage(), withNavBar: false);
+                        },
                         icon: SvgPicture.asset("assets/images/store-icon.svg")),
                     Text("Cabang")
                   ],
@@ -44,7 +50,10 @@ class _futureBoxState extends State<futureBox> {
                 Column(
                   children: [
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          pushNewScreen(context,
+                              screen: memberPage(), withNavBar: false);
+                        },
                         icon:
                             SvgPicture.asset("assets/images/people-icon.svg")),
                     Text("Pelanggan")

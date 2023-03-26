@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:londreeapp/view/Page/ActionPage/add.dart';
 import 'package:londreeapp/view/Page/home.dart';
-import 'package:londreeapp/view/started/login.dart';
-import 'package:londreeapp/view/started/started.dart';
+import 'package:londreeapp/view/Page/auth/login.dart';
+import 'package:londreeapp/view/Page/auth/started.dart';
 import 'package:londreeapp/view/test.dart';
 
 class splachScreen extends StatefulWidget {

@@ -7,7 +7,9 @@ import 'package:londreeapp/view/Page/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:londreeapp/view/component/bottom_navbar.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
-import 'package:londreeapp/view/started/started.dart';
+import 'package:londreeapp/view/Page/auth/login.dart';
+import 'package:londreeapp/view/Page/auth/started.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 class AuthController extends StateNotifier<Users> {
   AuthController() : super(Users());
@@ -49,6 +51,28 @@ class AuthController extends StateNotifier<Users> {
       var error = e.message.toString();
       Snackbars().failedSnackbars(context, 'Gagal Masuk', error);
       Navigator.pop(context);
+    }
+  }
+
+  Future<void> signOut(BuildContext context) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(
+              child: CircularProgressIndicator.adaptive(
+                backgroundColor: HexColor('#4392A4'),
+              ),
+            ));
+    try {
+      await FirebaseAuth.instance.signOut();
+      if (!mounted) return;
+      Snackbars()
+          .successSnackbars(context, 'Log Out Succeed', "You're Logged Out");
+      pushNewScreen(context, screen: login(), withNavBar: false);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      Snackbars()
+          .failedSnackbars(context, 'Log Out Failed', e.message.toString());
     }
   }
 

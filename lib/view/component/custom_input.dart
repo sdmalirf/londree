@@ -49,7 +49,8 @@ class _TextInputCustomState extends State<TextInputCustom> {
               decoration: InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
                   hintText: widget.hint),
             )
           ],

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/view/Page/home.dart';
 import 'package:londreeapp/view/Page/information.dart';
 import 'package:londreeapp/view/Page/profile.dart';
-import 'package:londreeapp/view/Page/transaction.dart';
+import 'package:londreeapp/view/Page/transactions/transaction.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 class bottomNavbar extends StatefulWidget {

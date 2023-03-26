@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
-import 'package:londreeapp/view/component/text_input.dart';
+import 'package:londreeapp/view/component/custom_input.dart';
 
 class customButtonProfile extends StatelessWidget {
   final String title;
