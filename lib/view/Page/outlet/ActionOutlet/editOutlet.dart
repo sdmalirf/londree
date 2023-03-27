@@ -155,7 +155,7 @@ class _editOutletState extends ConsumerState<editOutlet> {
                         Expanded(
                           child: customButton(
                               press: () {
-                                print(widget.data!.nama);
+                                Navigator.pop(context);
                               },
                               title: "Batalkan",
                               color: Colors.white,

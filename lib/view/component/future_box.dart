@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/view/Page/member/member.dart';
 import 'package:londreeapp/view/Page/outlet/outlet.dart';
+import 'package:londreeapp/view/Page/paket/paket.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 class futureBox extends StatefulWidget {
@@ -62,7 +63,10 @@ class _futureBoxState extends State<futureBox> {
                 Column(
                   children: [
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          pushNewScreen(context,
+                              screen: paketPage(), withNavBar: false);
+                        },
                         icon: SvgPicture.asset("assets/images/box-icon.svg")),
                     Text("Paket")
                   ],

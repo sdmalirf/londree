@@ -44,6 +44,7 @@ class _detailMemberState extends ConsumerState<detailMember> {
     _nama.dispose();
     _alamat.dispose();
     _kontak.dispose();
+    _jeniskelamin.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -113,14 +114,29 @@ class _detailMemberState extends ConsumerState<detailMember> {
                             )
                           ],
                         )),
-                    TextFormField(
-                      controller: _jeniskelamin,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          border: OutlineInputBorder(),
-                          hintText: 'jenis kelamin'),
-                    ),
+                    Container(
+                        margin: EdgeInsets.only(top: 25),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 12),
+                              child: Text(
+                                'Jenis Kelamin',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            TextFormField(
+                              controller: _jeniskelamin,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  border: OutlineInputBorder(),
+                                  hintText: 'alamat'),
+                            )
+                          ],
+                        )),
                     Container(
                         margin: EdgeInsets.only(top: 25),
                         child: Column(
@@ -150,7 +166,7 @@ class _detailMemberState extends ConsumerState<detailMember> {
                         Expanded(
                           child: customButton(
                               press: () {
-                                print(widget.data!.nama);
+                                Navigator.pop(context);
                               },
                               title: "Kembali",
                               color: Colors.white,

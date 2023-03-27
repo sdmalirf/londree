@@ -5,43 +5,43 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/controller/outlet_controller.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
-import 'package:londreeapp/model/outlets.dart';
+import 'package:londreeapp/model/pakets.dart';
 import 'package:londreeapp/model/transactions.dart';
 import 'package:londreeapp/view/component/bottom_navbar.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
 import 'package:londreeapp/view/component/custom_input.dart';
 
-class detailOutlet extends ConsumerStatefulWidget {
-  final Outlets? data;
+class detailPaket extends ConsumerStatefulWidget {
+  final Pakets? data;
 
-  detailOutlet({super.key, this.data});
+  detailPaket({super.key, this.data});
 
   @override
-  ConsumerState<detailOutlet> createState() => _detailOutletState();
+  ConsumerState<detailPaket> createState() => _detailPaketState();
 }
 
-class _detailOutletState extends ConsumerState<detailOutlet> {
+class _detailPaketState extends ConsumerState<detailPaket> {
   int count = 0;
 
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nama;
-  late TextEditingController _alamat;
-  late TextEditingController _kontak;
+  late TextEditingController _jenis;
+  late TextEditingController _harga;
 
   @override
   void initState() {
     super.initState();
     _nama = TextEditingController(text: widget.data!.nama);
-    _alamat = TextEditingController(text: widget.data!.alamat);
-    _kontak = TextEditingController(text: widget.data!.kontak);
+    _jenis = TextEditingController(text: widget.data!.jenis);
+    _harga = TextEditingController(text: widget.data!.harga.toString());
   }
 
   @override
   void dispose() {
     _nama.dispose();
-    _alamat.dispose();
-    _kontak.dispose();
+    _jenis.dispose();
+    _harga.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -102,7 +102,7 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
                               ),
                             ),
                             TextFormField(
-                              controller: _alamat,
+                              controller: _jenis,
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
@@ -119,18 +119,18 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
                             Container(
                               margin: EdgeInsets.only(bottom: 12),
                               child: Text(
-                                'kontak',
+                                'Jenis Kelamin',
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                             ),
                             TextFormField(
-                              controller: _kontak,
+                              controller: _harga,
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   border: OutlineInputBorder(),
-                                  hintText: 'kontak'),
+                                  hintText: 'alamat'),
                             )
                           ],
                         )),
@@ -142,7 +142,7 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
                               press: () {
                                 Navigator.pop(context);
                               },
-                              title: "Batalkan",
+                              title: "Kembali",
                               color: Colors.white,
                               textcolor: Colors.black,
                               link: ""),
@@ -194,16 +194,16 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
 //   }
 // }
 
-// class detailOutlet extends StatefulWidget {
+// class detailPaket extends StatefulWidget {
 //   final Map<String, dynamic>? data;
 
-//   detailOutlet({Key? key, this.data}) : super(key: key);
+//   detailPaket({Key? key, this.data}) : super(key: key);
 
 //   @override
-//   State<detailOutlet> createState() => _detailOutletState();
+//   State<detailPaket> createState() => _detailPaketState();
 // }
 
-// class _detailOutletState extends State<detailOutlet> {
+// class _detailPaketState extends State<detailPaket> {
 //   late TextEditingController namaController;
 
 //   late TextEditingController alamatController;

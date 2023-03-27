@@ -1,50 +1,65 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:londreeapp/controller/member_controller.dart';
 import 'package:londreeapp/controller/outlet_controller.dart';
+import 'package:londreeapp/controller/paket_controller.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
+import 'package:londreeapp/model/members.dart';
 import 'package:londreeapp/model/outlets.dart';
+import 'package:londreeapp/model/pakets.dart';
 import 'package:londreeapp/model/transactions.dart';
 import 'package:londreeapp/view/component/bottom_navbar.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
 import 'package:londreeapp/view/component/custom_input.dart';
 
-class detailOutlet extends ConsumerStatefulWidget {
-  final Outlets? data;
+class editPaket extends ConsumerStatefulWidget {
+  final Pakets? data;
 
-  detailOutlet({super.key, this.data});
+  editPaket({super.key, this.data});
 
   @override
-  ConsumerState<detailOutlet> createState() => _detailOutletState();
+  ConsumerState<editPaket> createState() => _editPaketState();
 }
 
-class _detailOutletState extends ConsumerState<detailOutlet> {
+class _editPaketState extends ConsumerState<editPaket> {
   int count = 0;
 
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nama;
-  late TextEditingController _alamat;
-  late TextEditingController _kontak;
+  late TextEditingController _harga;
+  String? _selectedvalue;
 
   @override
   void initState() {
+    _selectedvalue = widget.data!.jenis;
     super.initState();
     _nama = TextEditingController(text: widget.data!.nama);
-    _alamat = TextEditingController(text: widget.data!.alamat);
-    _kontak = TextEditingController(text: widget.data!.kontak);
+    _harga = TextEditingController(text: widget.data!.harga.toString());
   }
 
   @override
   void dispose() {
     _nama.dispose();
-    _alamat.dispose();
-    _kontak.dispose();
+    _harga.dispose();
     // TODO: implement dispose
     super.dispose();
   }
+
+  final List<String> items = [
+    'Kiloan',
+    'Selimut',
+    'Bed Cover',
+    'Kaos',
+    'Lainnya',
+  ];
+  String? _selectedOutlet;
+  String? _selectedJenis;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +72,7 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
           children: [
             Center(
               child: SvgPicture.asset(
-                "assets/images/people-icon.svg",
+                "assets/images/box-icon.svg",
                 width: 100,
               ),
             ),
@@ -73,7 +88,7 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
                             Container(
                               margin: EdgeInsets.only(bottom: 12),
                               child: Text(
-                                'nama',
+                                'Nama Paket',
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
@@ -84,8 +99,79 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   border: OutlineInputBorder(),
-                                  hintText: 'nama'),
+                                  hintText: 'nama paket'),
                             )
+                          ],
+                        )),
+
+                    Container(
+                        margin: EdgeInsets.only(top: 25),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 12),
+                              child: Text(
+                                'Jenis Paket',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButtonFormField2(
+                                decoration: const InputDecoration.collapsed(
+                                    hintText: ''),
+                                validator: (val) {
+                                  if (val == null || val == '') {
+                                    return 'Pilih Jenis Paket';
+                                  }
+                                  return null;
+                                },
+                                isExpanded: true,
+                                buttonDecoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5)),
+                                    border: Border.all(
+                                        color:
+                                            Color.fromARGB(255, 211, 211, 211),
+                                        width: 2)),
+                                buttonHeight: 50,
+                                buttonPadding: const EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 5),
+                                items: items
+                                    .map((item) => DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Color.fromARGB(
+                                                    255, 46, 46, 46)),
+                                          ),
+                                        ))
+                                    .toList(),
+                                value: _selectedvalue,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedvalue = newValue.toString();
+                                  });
+                                },
+                                dropdownMaxHeight: 150,
+                                dropdownDecoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 240, 240, 240),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5))),
+                                iconEnabledColor: Color.fromARGB(255, 0, 0, 0),
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400),
+                                dropdownElevation: 1,
+                                scrollbarThickness: 5,
+                                scrollbarAlwaysShow: true,
+                                scrollbarRadius: const Radius.circular(40),
+                              ),
+                            ),
                           ],
                         )),
                     Container(
@@ -96,44 +182,33 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
                             Container(
                               margin: EdgeInsets.only(bottom: 12),
                               child: Text(
-                                'alamat',
+                                'Harga',
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                             ),
                             TextFormField(
-                              controller: _alamat,
+                              controller: _harga,
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   border: OutlineInputBorder(),
-                                  hintText: 'alamat'),
+                                  hintText: 'harga paket'),
                             )
                           ],
                         )),
-                    Container(
-                        margin: EdgeInsets.only(top: 25),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(bottom: 12),
-                              child: Text(
-                                'kontak',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            TextFormField(
-                              controller: _kontak,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  border: OutlineInputBorder(),
-                                  hintText: 'kontak'),
-                            )
-                          ],
-                        )),
+                    // TextInputCustom(
+                    //   title: "Nama Pelanggan",
+                    //   controller: _nama,
+                    // ),
+                    // TextInputCustom(
+                    //   title: "berat",
+                    //   controller: _berat,
+                    // ),
+                    // TextInputCustom(
+                    //   title: "total",
+                    //   controller: _total,
+                    // ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 20)),
                     Row(
                       children: [
@@ -148,6 +223,40 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
                               link: ""),
                         ),
                         Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                        Expanded(
+                            child: customButton(
+                          title: "Tambah",
+                          color: Colors.blue,
+                          textcolor: Colors.white,
+                          press: () async {
+                            try {
+                              Pakets pakets = Pakets(
+                                  nama: _nama.text,
+                                  harga: int.tryParse(_harga.text),
+                                  jenis: _selectedvalue);
+                              await ref
+                                  .read(PaketControllerProvider.notifier)
+                                  .updatePaket(
+                                      context: context,
+                                      pakets: pakets,
+                                      mid: widget.data!.pid.toString());
+                              setState(() {});
+                              if (!mounted) return;
+                              Snackbars().successSnackbars(context, 'Berhasil',
+                                  'Berhasil Menambah Siswa');
+                              Navigator.of(context)
+                                  .popUntil((_) => count++ >= 2);
+
+                              // Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => bottomNavbar()));
+                            } on FirebaseException catch (e) {
+                              Snackbars().failedSnackbars(
+                                  context, 'Gagal', e.message.toString());
+                            }
+                          },
+                        ))
                       ],
                     )
                   ],
@@ -194,16 +303,16 @@ class _detailOutletState extends ConsumerState<detailOutlet> {
 //   }
 // }
 
-// class detailOutlet extends StatefulWidget {
+// class editPaket extends StatefulWidget {
 //   final Map<String, dynamic>? data;
 
-//   detailOutlet({Key? key, this.data}) : super(key: key);
+//   editPaket({Key? key, this.data}) : super(key: key);
 
 //   @override
-//   State<detailOutlet> createState() => _detailOutletState();
+//   State<editPaket> createState() => _editPaketState();
 // }
 
-// class _detailOutletState extends State<detailOutlet> {
+// class _editPaketState extends State<editPaket> {
 //   late TextEditingController namaController;
 
 //   late TextEditingController alamatController;

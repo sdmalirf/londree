@@ -31,11 +31,13 @@ class _editMemberState extends ConsumerState<editMember> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nama;
   late TextEditingController _alamat;
-  late TextEditingController _jeniskelamin;
+  String? _selectedvalue;
+
   late TextEditingController _kontak;
 
   @override
   void initState() {
+    _selectedvalue = widget.data!.jeniskelamin;
     super.initState();
     _nama = TextEditingController(text: widget.data!.nama);
     _alamat = TextEditingController(text: widget.data!.alamat);
@@ -55,7 +57,6 @@ class _editMemberState extends ConsumerState<editMember> {
     'Lakilaki',
     'Perempuan',
   ];
-  String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -92,70 +93,14 @@ class _editMemberState extends ConsumerState<editMember> {
                             TextFormField(
                               controller: _nama,
                               decoration: InputDecoration(
-                                  suffixIcon: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: SvgPicture.asset(
-                                        "assets/images/pencil-icon.svg",
-                                      )),
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   border: OutlineInputBorder(),
-                                  hintText: 'nama'),
+                                  hintText: 'nama outlet'),
                             )
                           ],
                         )),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButtonFormField2(
-                        decoration:
-                            const InputDecoration.collapsed(hintText: ''),
-                        validator: (val) {
-                          if (val == null || val == '') {
-                            return 'Please Choose Your Grade!';
-                          }
-                          return null;
-                        },
-                        isExpanded: true,
-                        buttonDecoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20.0)),
-                            border: Border.all(color: Colors.white, width: 2)),
-                        buttonHeight: 60,
-                        buttonPadding:
-                            const EdgeInsets.symmetric(horizontal: 14.0),
-                        items: items
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedValue,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValue = value as String;
-                          });
-                        },
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 150,
-                        dropdownDecoration: BoxDecoration(
-                            color: HexColor('204FA1'),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10))),
-                        iconEnabledColor: Colors.white,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w700),
-                        dropdownElevation: 1,
-                        scrollbarThickness: 5,
-                        scrollbarAlwaysShow: true,
-                        scrollbarRadius: const Radius.circular(40),
-                      ),
-                    ),
+
                     Container(
                         margin: EdgeInsets.only(top: 25),
                         child: Column(
@@ -164,7 +109,7 @@ class _editMemberState extends ConsumerState<editMember> {
                             Container(
                               margin: EdgeInsets.only(bottom: 12),
                               child: Text(
-                                'alamat',
+                                'Alamat',
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
@@ -172,16 +117,81 @@ class _editMemberState extends ConsumerState<editMember> {
                             TextFormField(
                               controller: _alamat,
                               decoration: InputDecoration(
-                                  suffixIcon: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: SvgPicture.asset(
-                                        "assets/images/pencil-icon.svg",
-                                      )),
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   border: OutlineInputBorder(),
                                   hintText: 'alamat'),
                             )
+                          ],
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(top: 25),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 12),
+                              child: Text(
+                                'Jenis Kelamin',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButtonFormField2(
+                                decoration: const InputDecoration.collapsed(
+                                    hintText: ''),
+                                validator: (val) {
+                                  if (val == null || val == '') {
+                                    return 'Pilih Jenis Kelamin';
+                                  }
+                                  return null;
+                                },
+                                isExpanded: true,
+                                buttonDecoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5)),
+                                    border: Border.all(
+                                        color:
+                                            Color.fromARGB(255, 211, 211, 211),
+                                        width: 2)),
+                                buttonHeight: 50,
+                                buttonPadding: const EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 5),
+                                items: items
+                                    .map((item) => DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Color.fromARGB(
+                                                    255, 46, 46, 46)),
+                                          ),
+                                        ))
+                                    .toList(),
+                                value: _selectedvalue,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedvalue = newValue.toString();
+                                  });
+                                },
+                                dropdownMaxHeight: 150,
+                                dropdownDecoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 240, 240, 240),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5))),
+                                iconEnabledColor: Color.fromARGB(255, 0, 0, 0),
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400),
+                                dropdownElevation: 1,
+                                scrollbarThickness: 5,
+                                scrollbarAlwaysShow: true,
+                                scrollbarRadius: const Radius.circular(40),
+                              ),
+                            ),
                           ],
                         )),
                     Container(
@@ -200,11 +210,6 @@ class _editMemberState extends ConsumerState<editMember> {
                             TextFormField(
                               controller: _kontak,
                               decoration: InputDecoration(
-                                  suffixIcon: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: SvgPicture.asset(
-                                        "assets/images/pencil-icon.svg",
-                                      )),
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   border: OutlineInputBorder(),
@@ -212,13 +217,25 @@ class _editMemberState extends ConsumerState<editMember> {
                             )
                           ],
                         )),
+                    // TextInputCustom(
+                    //   title: "Nama Pelanggan",
+                    //   controller: _nama,
+                    // ),
+                    // TextInputCustom(
+                    //   title: "berat",
+                    //   controller: _berat,
+                    // ),
+                    // TextInputCustom(
+                    //   title: "total",
+                    //   controller: _total,
+                    // ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 20)),
                     Row(
                       children: [
                         Expanded(
                           child: customButton(
                               press: () {
-                                print(widget.data!.nama);
+                                Navigator.pop(context);
                               },
                               title: "Batalkan",
                               color: Colors.white,
@@ -228,7 +245,7 @@ class _editMemberState extends ConsumerState<editMember> {
                         Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
                         Expanded(
                             child: customButton(
-                          title: "Ubah",
+                          title: "Tambah",
                           color: Colors.blue,
                           textcolor: Colors.white,
                           press: () async {
@@ -236,8 +253,8 @@ class _editMemberState extends ConsumerState<editMember> {
                               Members members = Members(
                                   nama: _nama.text,
                                   alamat: _alamat.text,
-                                  jeniskelamin: _jeniskelamin.text,
-                                  kontak: _kontak.text);
+                                  kontak: _kontak.text,
+                                  jeniskelamin: _selectedvalue);
                               await ref
                                   .read(MemberControllerProvider.notifier)
                                   .updateMember(

@@ -24,11 +24,11 @@ class customButtonProfile extends StatelessWidget {
       child: RawMaterialButton(
         fillColor: color,
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => link,
-              ));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => link,
+          //     ));
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Padding(
@@ -100,10 +100,28 @@ class _profilePageState extends State<profilePage> {
               )
             ],
           ),
-          TextInputCustom(title: "Username"),
-          TextInputCustom(title: "Email"),
-          TextInputCustom(title: "Alamat"),
-          TextInputCustom(title: "Nomor Telepon"),
+          Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Harga Paket',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(),
+                        hintText: 'harga paket'),
+                  )
+                ],
+              )),
           Padding(padding: EdgeInsets.symmetric(vertical: 20)),
           Row(
             children: [

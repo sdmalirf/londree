@@ -2,36 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:londreeapp/controller/auth_controller.dart';
-import 'package:londreeapp/controller/member_controller.dart';
-import 'package:londreeapp/controller/outlet_controller.dart';
-import 'package:londreeapp/controller/transaction_controller.dart';
-import 'package:londreeapp/model/members.dart';
-import 'package:londreeapp/model/outlets.dart';
-import 'package:londreeapp/model/transactions.dart';
-import 'package:londreeapp/view/Page/member/ActionMember/addMember.dart';
-import 'package:londreeapp/view/Page/member/ActionMember/detailMember.dart';
-import 'package:londreeapp/view/Page/member/ActionMember/editMember.dart';
-import 'package:londreeapp/view/Page/outlet/ActionOutlet/addOutlet.dart';
-import 'package:londreeapp/view/Page/outlet/ActionOutlet/detailOutlet.dart';
-import 'package:londreeapp/view/Page/outlet/ActionOutlet/editOutlet.dart';
-import 'package:londreeapp/view/Page/transactions/ActionPage/add.dart';
+import 'package:londreeapp/controller/paket_controller.dart';
+
+import 'package:londreeapp/model/pakets.dart';
+import 'package:londreeapp/view/Page/paket/ActionPaket/detailPaket.dart';
+import 'package:londreeapp/view/Page/paket/Actionpaket/editpaket.dart';
+import 'package:londreeapp/view/Page/paket/ActionPaket/addPaket.dart';
 import 'package:animated_floating_buttons/animated_floating_buttons.dart';
-import 'package:londreeapp/view/Page/transactions/ActionPage/edit.dart';
-import 'package:londreeapp/view/component/paged_table.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
-import 'package:londreeapp/view/component/table.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
-class memberPage extends ConsumerStatefulWidget {
-  Members? data;
-  memberPage({super.key, this.data});
+class paketPage extends ConsumerStatefulWidget {
+  Pakets? data;
+  paketPage({super.key, this.data});
 
   @override
-  ConsumerState<memberPage> createState() => _memberPage();
+  ConsumerState<paketPage> createState() => _paketPage();
 }
 
-class _memberPage extends ConsumerState<memberPage> {
+class _paketPage extends ConsumerState<paketPage> {
   TextEditingController search = TextEditingController();
   bool selectedRow = false;
   int? selectedRowIndex;
@@ -63,11 +52,11 @@ class _memberPage extends ConsumerState<memberPage> {
     loadData();
   }
 
-  List<Members> memberResult = [];
+  List<Pakets> paketResult = [];
 
   Future<void> getAllData() async {
-    final users = ref.watch(authControllerProvider);
-    await ref.read(MemberControllerProvider.notifier).getMembers();
+    final users = ref.watch(PaketControllerProvider);
+    await ref.read(PaketControllerProvider.notifier).getPakets();
   }
 
   Future loadData() async {
@@ -91,23 +80,23 @@ class _memberPage extends ConsumerState<memberPage> {
 
   @override
   Widget build(BuildContext context) {
-    var member = ref.watch(MemberControllerProvider);
+    var paket = ref.watch(PaketControllerProvider);
 
     void updateList(String value) {
       try {
         if (value != '') {
-          memberResult.clear();
+          paketResult.clear();
 
-          var temp = member
+          var temp = paket
               .where((element) =>
                       element.nama!.toLowerCase().contains(value.toLowerCase())
                   // ||
                   // element.nis!.toLowerCase().contains(value.toLowerCase()))
                   )
               .toList();
-          temp.map((e) => memberResult.add(e)).toList();
+          temp.map((e) => paketResult.add(e)).toList();
         } else {
-          memberResult.clear();
+          paketResult.clear();
         }
       } catch (e) {
         print(e);
@@ -119,7 +108,7 @@ class _memberPage extends ConsumerState<memberPage> {
         child: FloatingActionButton(
           backgroundColor: Colors.white,
           onPressed: () {
-            pushNewScreen(context, screen: addMemberPage(), withNavBar: false);
+            pushNewScreen(context, screen: addPaket(), withNavBar: false);
           },
           heroTag: "tambah",
           tooltip: 'tambah',
@@ -138,7 +127,7 @@ class _memberPage extends ConsumerState<memberPage> {
           onPressed: () {
             if (selectedRow = true) {
               pushNewScreen(context,
-                  screen: editMember(
+                  screen: editPaket(
                     data: widget.data,
                   ),
                   withNavBar: false);
@@ -160,8 +149,8 @@ class _memberPage extends ConsumerState<memberPage> {
           backgroundColor: Colors.white,
           onPressed: () async {
             try {
-              await ref.read(MemberControllerProvider.notifier).deleteMember(
-                  context: context, mid: widget.data!.mid.toString());
+              await ref.read(PaketControllerProvider.notifier).deletePaket(
+                  context: context, pid: widget.data!.pid.toString());
               setState(() {});
               if (!mounted) {
                 return;
@@ -196,7 +185,7 @@ class _memberPage extends ConsumerState<memberPage> {
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
             appBar: AppBar(
-              title: Text("Pelanggan"),
+              title: Text("Paket"),
             ),
             floatingActionButton: AnimatedFloatingActionButton(
               //Fab list
@@ -216,7 +205,7 @@ class _memberPage extends ConsumerState<memberPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Jumlah Pelanggan",
+                            "Jumlah Paket",
                             style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600,
@@ -226,14 +215,14 @@ class _memberPage extends ConsumerState<memberPage> {
                           Row(
                             children: [
                               Text(
-                                member.length.toString(),
+                                paket.length.toString(),
                                 style: TextStyle(
                                     fontSize: 40, fontWeight: FontWeight.w600),
                               ),
                               Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 4)),
                               Text(
-                                "Orang",
+                                "Paket",
                                 style: TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w400,
@@ -246,7 +235,7 @@ class _memberPage extends ConsumerState<memberPage> {
                       Padding(
                         padding: const EdgeInsets.only(right: 30),
                         child: SvgPicture.asset(
-                          "assets/images/store-icon.svg",
+                          "assets/images/box-icon.svg",
                           width: 70,
                         ),
                       )
@@ -325,14 +314,14 @@ class _memberPage extends ConsumerState<memberPage> {
                   SizedBox(
                       width: 360,
                       height: 360,
-                      child: StreamBuilder<List<Members>>(
+                      child: StreamBuilder<List<Pakets>>(
                         stream:
-                            ref.watch(MemberControllerProvider.notifier).stream,
+                            ref.watch(PaketControllerProvider.notifier).stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             search.text.isNotEmpty
-                                ? memberResult
-                                : member = snapshot.data!;
+                                ? paketResult
+                                : paket = snapshot.data!;
                             return Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
@@ -364,7 +353,7 @@ class _memberPage extends ConsumerState<memberPage> {
                                       DataColumn(
                                         label: Expanded(
                                           child: Text(
-                                            'Alamat',
+                                            'Jenis',
                                             style: TextStyle(
                                                 fontStyle: FontStyle.italic),
                                           ),
@@ -375,7 +364,7 @@ class _memberPage extends ConsumerState<memberPage> {
                                       DataColumn(
                                         label: Expanded(
                                           child: Text(
-                                            'Kontak',
+                                            'Harga',
                                             style: TextStyle(
                                                 fontStyle: FontStyle.italic),
                                           ),
@@ -433,8 +422,8 @@ class _memberPage extends ConsumerState<memberPage> {
                                           ],
                                           rows: [
                                             ...((search.text.isNotEmpty
-                                                    ? memberResult
-                                                    : member)
+                                                    ? paketResult
+                                                    : paket)
                                                   ..sort((a, b) {
                                                     if (_sortColumnIndex ==
                                                         null) {
@@ -451,12 +440,12 @@ class _memberPage extends ConsumerState<memberPage> {
                                                                 b.nama!);
                                                       case 1: // Berat
                                                         return ascending *
-                                                            a.alamat!.compareTo(
-                                                                b.alamat!);
+                                                            a.jenis!.compareTo(
+                                                                b.jenis!);
                                                       case 2: // Total
                                                         return ascending *
-                                                            a.kontak!.compareTo(
-                                                                b.kontak!);
+                                                            a.harga!.compareTo(
+                                                                b.harga!);
                                                       // case 3: // Keterangan
                                                       //   return ascending *
                                                       //       a.keterangan!
@@ -476,7 +465,7 @@ class _memberPage extends ConsumerState<memberPage> {
                                                   if (selectedRowIndex ==
                                                       rowIndex) {
                                                     pushNewScreen(context,
-                                                        screen: detailMember(
+                                                        screen: detailPaket(
                                                             data: widget.data));
                                                   } else
                                                     (e) {};
@@ -489,12 +478,12 @@ class _memberPage extends ConsumerState<memberPage> {
                                                     rowIndex,
                                                 onSelectChanged: (value) {
                                                   setState(() {
-                                                    final outlet = ref.watch(
-                                                        MemberControllerProvider);
+                                                    final paket = ref.watch(
+                                                        PaketControllerProvider);
                                                     widget.data =
                                                         (search.text.isNotEmpty
-                                                            ? memberResult
-                                                            : outlet)[rowIndex];
+                                                            ? paketResult
+                                                            : paket)[rowIndex];
 
                                                     selectedRow = value!;
                                                     selectedRowIndex = rowIndex;
@@ -510,13 +499,13 @@ class _memberPage extends ConsumerState<memberPage> {
                                                   DataCell(
                                                     SizedBox(
                                                         width: 80,
-                                                        child: Text(data.alamat
+                                                        child: Text(data.jenis
                                                             .toString())),
                                                   ),
                                                   DataCell(
                                                     SizedBox(
                                                         width: 70,
-                                                        child: Text(data.kontak
+                                                        child: Text(data.harga
                                                             .toString())),
                                                   ),
                                                 ],
@@ -550,7 +539,7 @@ class _memberPage extends ConsumerState<memberPage> {
                                             BorderRadius.circular(10))),
                               ),
                               onPressed: () {
-                                print(memberResult);
+                                print(paketResult);
                               },
                               child: Container(
                                 child: Row(
@@ -597,15 +586,15 @@ class _memberPage extends ConsumerState<memberPage> {
 // import 'package:londreeapp/view/component/table.dart';
 // import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
-// class memberPage extends ConsumerStatefulWidget {
+// class paketPage extends ConsumerStatefulWidget {
 //   Transactions? data;
-//   memberPage({super.key});
+//   paketPage({super.key});
 
 //   @override
-//   ConsumerState<memberPage> createState() => _memberPageState();
+//   ConsumerState<paketPage> createState() => _paketPageState();
 // }
 
-// class _memberPageState extends ConsumerState<memberPage> {
+// class _paketPageState extends ConsumerState<paketPage> {
 //   TextEditingController nama = TextEditingController();
 //   TextEditingController berat = TextEditingController();
 //   TextEditingController total = TextEditingController();
@@ -630,12 +619,12 @@ class _memberPage extends ConsumerState<memberPage> {
 //     loadData();
 //   }
 
-//   List<Transactions> memberResult = [];
+//   List<Transactions> paketResult = [];
 
 //   Future<void> getAllTransaksi() async {
 //     final users = ref.watch(authControllerProvider);
 //     await ref
-//         .read(MemberControllerProvider.notifier)
+//         .read(PaketControllerProvider.notifier)
 //         .getTransaction(uid: users.uid!);
 //   }
 
@@ -707,7 +696,7 @@ class _memberPage extends ConsumerState<memberPage> {
 //           onPressed: () async {
 //             try {
 //               await ref
-//                   .read(MemberControllerProvider.notifier)
+//                   .read(PaketControllerProvider.notifier)
 //                   .deleteTransaction(
 //                       context: context, tid: widget.data!.tid.toString());
 //               setState(() {});
@@ -823,11 +812,11 @@ class _memberPage extends ConsumerState<memberPage> {
 //                 Expanded(
 //                     child: StreamBuilder<List<Transactions>>(
 //                         stream: ref
-//                             .watch(MemberControllerProvider.notifier)
+//                             .watch(PaketControllerProvider.notifier)
 //                             .stream,
 //                         builder: (context, snapshot) {
 //                           if (snapshot.hasData) {
-//                             memberResult = snapshot.data!;
+//                             paketResult = snapshot.data!;
 //                             return Container(
 //                                 decoration: BoxDecoration(
 //                                     border: Border.all(
@@ -936,7 +925,7 @@ class _memberPage extends ConsumerState<memberPage> {
 //                                               ),
 //                                             ],
 //                                             rows: [
-//                                               ...memberResult
+//                                               ...paketResult
 //                                                   .asMap()
 //                                                   .entries
 //                                                   .map((entry) {
@@ -951,7 +940,7 @@ class _memberPage extends ConsumerState<memberPage> {
 //                                                       final users = ref.watch(
 //                                                           authControllerProvider);
 //                                                       widget.data =
-//                                                           memberResult[
+//                                                           paketResult[
 //                                                               rowIndex];
 //                                                       print(data.nama);
 //                                                       print(users.uid);
