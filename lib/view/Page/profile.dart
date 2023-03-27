@@ -100,10 +100,94 @@ class _profilePageState extends State<profilePage> {
               )
             ],
           ),
-          TextInputCustom(title: "Username"),
-          TextInputCustom(title: "Email"),
-          TextInputCustom(title: "Alamat"),
-          TextInputCustom(title: "Nomor Telepon"),
+          Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Username',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(),
+                        hintText: 'nama pengguna'),
+                  )
+                ],
+              )),
+          Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Email',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(),
+                        hintText: 'email penggunak'),
+                  )
+                ],
+              )),
+          Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Alamat',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(),
+                        hintText: 'alamat pengguna'),
+                  )
+                ],
+              )),
+          Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Nomor Telepon',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(),
+                        hintText: 'nomor pengguna'),
+                  )
+                ],
+              )),
           Padding(padding: EdgeInsets.symmetric(vertical: 20)),
           Row(
             children: [
