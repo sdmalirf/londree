@@ -1,9 +1,16 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/view/component/chip_list.dart';
 import 'package:londreeapp/view/component/container_information.dart';
-import 'package:londreeapp/view/component/information_box.dart';
-import 'package:londreeapp/view/component/table.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:open_file/open_file.dart';
+import 'package:excel/excel.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class informationPage extends StatefulWidget {
   const informationPage({super.key});
@@ -16,6 +23,16 @@ class _informationPageState extends State<informationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+            foregroundColor: Colors.blue,
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
+            label: Text(
+              "Pengguna",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+            ),
+            icon: SvgPicture.asset("assets/images/people-icon.svg"),
+            onPressed: () {}),
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
