@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +15,11 @@ import 'package:londreeapp/view/component/paged_table.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
 import 'package:londreeapp/view/component/table.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:open_file/open_file.dart';
+import 'package:excel/excel.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class transactionPage extends ConsumerStatefulWidget {
   Transactions? data;
@@ -76,6 +84,80 @@ class _transactionPageState extends ConsumerState<transactionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final db = FirebaseFirestore.instance;
+    Future exportOfficerToExcel() async {
+      PermissionStatus status = await Permission.storage.request();
+      if (status != PermissionStatus.granted) return;
+
+      Directory? directory = await getExternalStorageDirectory();
+      String fileName = "DataTransaksi.xlsx";
+      String filePath =
+          "${directory!.parent.parent.parent.parent.path}/Download/$fileName";
+
+      try {
+        QuerySnapshot querySnapshot = await db.collection('transactions').get();
+        var workbook = Excel.createExcel();
+        var sheet = workbook['Sheet1'];
+        // Add headers to worksheet
+        sheet.appendRow([
+          'ID',
+          'nama',
+          'berat',
+          'total',
+        ]);
+        // Add data to worksheet
+        for (var document in querySnapshot.docs) {
+          dynamic documentData = document.data();
+          var row = [
+            documentData!['tid'].toString(),
+            documentData!['nama'].toString(),
+            documentData!['berat'].toString(),
+            documentData!['total'].toString(),
+          ];
+          sheet.appendRow(row);
+        }
+        // Save the file
+        File file = File(filePath);
+        file.writeAsBytesSync(workbook.save()!);
+        // awesome dialog file saved successfully
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          title: 'Berhasil mendownload file!',
+          desc: 'File tersimpan di folder Download di perangkat anda.',
+          buttonsBorderRadius: BorderRadius.circular(6),
+          showCloseIcon: false,
+          btnCancelText: 'Buka File',
+          btnCancelOnPress: () async {
+            final result = await OpenFile.open(filePath);
+            if (result.type == ResultType.noAppToOpen ||
+                result.type == ResultType.fileNotFound ||
+                result.type == ResultType.permissionDenied) {
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.error,
+                animType: AnimType.bottomSlide,
+                title: 'Gagal membuka file!',
+                desc: result.message,
+                btnOkOnPress: () {},
+                btnOkText: 'Tutup',
+                buttonsBorderRadius: BorderRadius.circular(6),
+              ).show();
+            }
+          },
+          btnOkText: 'Kembali Ke Home',
+          btnOkOnPress: () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/menu-panel', (route) => false);
+          },
+        ).show();
+      } catch (e) {
+        log(e.toString());
+      }
+    }
+
     Widget float1() {
       return Container(
         child: FloatingActionButton(
@@ -465,7 +547,7 @@ class _transactionPageState extends ConsumerState<transactionPage> {
                                   borderRadius: BorderRadius.circular(10))),
                         ),
                         onPressed: () {
-                          print(transaksiResult);
+                          exportOfficerToExcel();
                         },
                         child: Container(
                           child: Row(

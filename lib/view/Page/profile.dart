@@ -100,28 +100,6 @@ class _profilePageState extends State<profilePage> {
               )
             ],
           ),
-          Container(
-              margin: EdgeInsets.only(top: 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      'Harga Paket',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        border: OutlineInputBorder(),
-                        hintText: 'harga paket'),
-                  )
-                ],
-              )),
           Padding(padding: EdgeInsets.symmetric(vertical: 20)),
           Row(
             children: [
