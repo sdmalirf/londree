@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:londreeapp/model/users.dart';
 import 'package:londreeapp/view/Page/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:londreeapp/view/component/bottom_navbar.dart';
+import 'package:londreeapp/view/Page/navbar/admin/admin_navbar.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
 import 'package:londreeapp/view/Page/auth/login.dart';
 import 'package:londreeapp/view/Page/auth/started.dart';
@@ -76,58 +77,54 @@ class AuthController extends StateNotifier<Users> {
     }
   }
 
-//   Future<void> signUp(
-//       BuildContext context, String email, String password) async {
-//     try {
-//       var userCredential =
-//           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-//         email: email,
-//         password: password,
-//       );
-//       if (userCredential.user != null) {
-//         await FirebaseFirestore.instance
-//             .collection('users')
-//             .doc(userCredential.user!.uid)
-//             .set({
-//           'uid': userCredential.user!.uid,
-//           // 'name': Users().name,
-//           // 'addres': Users().addres,
-//           'email': userCredential.user!.email,
-//           'password': password,
-//           // 'phone': userCredential.user!.phoneNumber,
-//           // 'role': Users().roles,
-//         });
-//         await FirebaseFirestore.instance
-//             .collection('carts')
-//             .doc(userCredential.user!.uid)
-//             .set({
-//           "users": userCredential.user!.uid,
-//           "items": [],
-//         });
+  Future<void> registerPengguna(BuildContext context, String email,
+      String password, String name, String role,
+      {required String oid}) async {
+    // FirebaseApp app = await Firebase.initializeApp(
+    //     name: 'Secondary', options: Firebase.app().options);
+    try {
+      var userCredential = await FirebaseAuth.instance
+          // .instanceFor(app: app)
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'uid': userCredential.user!.uid,
+        'oid': oid,
+        'name': name,
+        'role': role,
+        // 'addres': addres,
+        'email': email,
+        'password': password,
+        // 'phone': phone,
+        // 'role': roles,
+      });
+      // final auth = FirebaseAuth.instance;
+      // final dbLog = FirebaseFirestore.instance.collection('log_history');
+      // final doc = dbLog.doc();
+      // await doc.set({
+      //   'log_id': doc.id,
+      //   'aktivitas': 'Membuat akun',
+      //   'email': auth.currentUser!.email,
+      //   'tgl': DateTime.now(),
+      // });
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => bottomNavbar()));
+      // ignore: use_build_context_synchronously
+      // ignore: use_build_context_synchronously
+      Snackbars()
+          .successSnackbars(context, 'Berhasil', 'Berhasil Menambah Akun');
+    } on FirebaseAuthException catch (e) {
+      // ignore: use_build_context_synchronously
+      Snackbars().failedSnackbars(context, 'Gagal', e.message.toString());
+    }
 
-//         final users = Users(
-//           uid: userCredential.user!.uid,
-//           // name: Users().name,
-//           // addres: Users().addres,
-//           email: userCredential.user!.email,
-//           password: password,
-//           // phone: userCredential.user!.phoneNumber,
-//           // roles: Users().roles,
-//         );
-//         state = users;
+    // await app.delete();
 
-//         // if (!mounted) return;
-//         // Navigator.pushReplacement(
-//         //   context,
-//         //   MaterialPageRoute(
-//         //     builder: (context) => started(),
-//         //   ),
-//         // );
-//       }
-//     } catch (e) {
-//       // Handle sign-up error
-//     }
-//   }
+    // return Future.sync(() => FirebaseAuth.instanceFor(app: app));
+  }
 
 //   // Future<void> addUserToFirestore(String uid, String name, String email) async {
 //   //   try {

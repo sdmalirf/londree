@@ -58,9 +58,7 @@ class _transactionPageState extends ConsumerState<transactionPage> {
 
   Future<void> getAllTransaksi() async {
     final users = ref.watch(authControllerProvider);
-    await ref
-        .read(transactionControllerProvider.notifier)
-        .getTransaction(uid: users.uid!);
+    await ref.read(transactionControllerProvider.notifier).getTransaction();
   }
 
   Future loadData() async {

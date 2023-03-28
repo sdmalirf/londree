@@ -10,8 +10,14 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
 
   final db = FirebaseFirestore.instance.collection('transactions');
 
-  Future<void> getTransaction({required String uid}) async {
-    var checkTransactions = await db.where('tid', isEqualTo: uid).get();
+  Future<void> getTransaction(
+      // required String uid
+      ) async {
+    var checkTransactions = await db
+        // .where(
+        //   'tid', isEqualTo: uid
+        //   )
+        .get();
     print(checkTransactions);
 
     List<Transactions> transactions = checkTransactions.docs
@@ -20,10 +26,11 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     state = transactions;
   }
 
-  Future<void> addTransaction(
-      {required BuildContext context,
-      required Transactions transactions,
-      required String uid}) async {
+  Future<void> addTransaction({
+    required BuildContext context,
+    required Transactions transactions,
+    // required String uid
+  }) async {
     final doc = db.doc();
     showDialog(
         context: context,
@@ -46,7 +53,9 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     //   'tgl': DateTime.now(),
     // });
 
-    await getTransaction(uid: uid);
+    await getTransaction(
+        // uid: uid
+        );
   }
 
   Future<void> updateTransaction(
@@ -72,7 +81,7 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     //   'email': auth.currentUser!.email,
     //   'tgl': DateTime.now(),
     // });
-    await getTransaction(uid: tid);
+    await getTransaction();
   }
 
   Future<void> deleteTransaction(
@@ -95,7 +104,7 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     //   'email': auth.currentUser!.email,
     //   'tgl': DateTime.now(),
     // });
-    await getTransaction(uid: tid);
+    await getTransaction();
   }
 }
 

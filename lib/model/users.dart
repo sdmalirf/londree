@@ -1,6 +1,8 @@
 class Users {
   String? uid;
-  // String? name;
+  String? oid;
+  String? name;
+  String? role;
   // String? addres;
   String? email;
   String? password;
@@ -9,7 +11,9 @@ class Users {
 
   Users({
     this.uid,
-    // this.name,
+    this.oid,
+    this.name,
+    this.role,
     // this.addres,
     this.email,
     this.password,
@@ -20,7 +24,9 @@ class Users {
   factory Users.fromJson(Map<String, dynamic> json) {
     return Users(
       uid: json['uid'],
-      // name: json['name'],
+      oid: json['oid'],
+      name: json['name'],
+      role: json['role'],
       // addres: json['addres'],
       email: json['email'],
       password: json['password'],
@@ -32,7 +38,9 @@ class Users {
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
-      // 'name': name,
+      'oid': oid,
+      'name': name,
+      'role': role,
       // 'addres': addres,
       'email': email,
       'password': password,
@@ -43,7 +51,9 @@ class Users {
 
   Users copyWith({
     String? uid,
-    // String? name,
+    String? oid,
+    String? name,
+    String? role,
     // String? addres,
     String? email,
     String? password,
@@ -52,7 +62,9 @@ class Users {
   }) {
     return Users(
       uid: uid ?? this.uid,
-      // name: name ?? this.name,
+      oid: oid ?? this.oid,
+      name: name ?? this.name,
+      role: role ?? this.role,
       email: email ?? this.email,
       password: password ?? this.password,
       // roles: roles ?? this.roles,

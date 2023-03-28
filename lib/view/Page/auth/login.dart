@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/view/Page/home.dart';
-import 'package:londreeapp/view/component/bottom_navbar.dart';
+import 'package:londreeapp/view/page/home/bottom_navbar.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
 import 'package:londreeapp/view/component/custom_input.dart';
 import 'package:londreeapp/controller/auth_controller.dart';

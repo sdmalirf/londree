@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
 import 'package:londreeapp/model/transactions.dart';
-import 'package:londreeapp/view/component/bottom_navbar.dart';
+import 'package:londreeapp/view/page/home/bottom_navbar.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
 import 'package:londreeapp/view/component/custom_input.dart';
@@ -222,7 +222,7 @@ class _editPageState extends ConsumerState<editPage> {
 // import 'package:flutter/material.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:londreeapp/view/Page/information.dart';
-// import 'package:londreeapp/view/component/bottom_navbar.dart';
+// import 'package:londreeapp/view/page/home/bottom_navbar.dart';
 // import 'package:londreeapp/view/component/custom_button.dart';
 
 // class editInput extends StatelessWidget {

@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
 import 'package:londreeapp/model/transactions.dart';
-import 'package:londreeapp/view/component/bottom_navbar.dart';
+import 'package:londreeapp/view/page/home/bottom_navbar.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
 import 'package:londreeapp/view/component/custom_input.dart';
@@ -159,16 +159,16 @@ class _addPageState extends ConsumerState<addPage> {
                           press: () async {
                             try {
                               Transactions transaction = Transactions(
-                                  nama: _nama.text,
-                                  berat: _berat.text,
-                                  total: _total.text,
-                                  uid: users.uid);
+                                nama: _nama.text,
+                                berat: _berat.text,
+                                total: _total.text,
+                              );
                               await ref
                                   .read(transactionControllerProvider.notifier)
                                   .addTransaction(
-                                      context: context,
-                                      transactions: transaction,
-                                      uid: users.uid!);
+                                    context: context,
+                                    transactions: transaction,
+                                  );
                               setState(() {});
                               if (!mounted) return;
                               Snackbars().successSnackbars(context, 'Berhasil',

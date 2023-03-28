@@ -36,9 +36,7 @@ class _DataTransaksiState extends ConsumerState<DataTransaksi> {
 
   Future<void> getAllTransaksi(String uid) async {
     final users = ref.watch(authControllerProvider);
-    await ref
-        .read(transactionControllerProvider.notifier)
-        .getTransaction(uid: users.uid!);
+    await ref.read(transactionControllerProvider.notifier).getTransaction();
   }
 
   Future loadData() async {

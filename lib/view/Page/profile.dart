@@ -100,6 +100,94 @@ class _profilePageState extends State<profilePage> {
               )
             ],
           ),
+          Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Nama',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(),
+                        hintText: 'nama pengguna'),
+                  )
+                ],
+              )),
+          Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Email',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(),
+                        hintText: 'email pengguna'),
+                  )
+                ],
+              )),
+          Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Jenis Kelamin',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(),
+                        hintText: 'jenis kelamin pengguna'),
+                  )
+                ],
+              )),
+          Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Nomor Telepon',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(),
+                        hintText: 'nomor pengguna'),
+                  )
+                ],
+              )),
           Padding(padding: EdgeInsets.symmetric(vertical: 20)),
           Row(
             children: [
