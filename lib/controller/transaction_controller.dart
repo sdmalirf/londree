@@ -23,7 +23,7 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
   Future<void> addTransaction(
       {required BuildContext context,
       required Transactions transactions,
-      required String oid}) async {
+      String? oid}) async {
     final doc = db.doc();
     showDialog(
         context: context,
@@ -32,7 +32,6 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
                 backgroundColor: HexColor('4392A4'),
               ),
             ));
-    Navigator.pop(context);
     Transactions temp = transactions.copyWith(tid: doc.id);
     await doc.set(temp.toJson());
 
@@ -53,7 +52,7 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
       {required BuildContext context,
       required Transactions transactions,
       required String tid,
-      required String oid}) async {
+      String? oid}) async {
     final doc = db.doc(tid);
     Transactions temp = transactions.copyWith(tid: doc.id);
     showDialog(
@@ -85,16 +84,12 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     await getTransaction(oid: oid);
   }
 
-  Future<void> deleteTransaction(
-      {required BuildContext context, required String tid}) async {
+  Future<void> deleteTransaction({
+    required BuildContext context,
+    required String tid,
+  }) async {
     final doc = db.doc(tid);
-    showDialog(
-        context: context,
-        builder: (context) => Center(
-              child: CircularProgressIndicator(
-                backgroundColor: HexColor('4392A4'),
-              ),
-            ));
+
     await doc.delete();
     final auth = FirebaseAuth.instance;
     final dbLog = FirebaseFirestore.instance.collection('logHistory');
@@ -113,6 +108,8 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     //   'email': auth.currentUser!.email,
     //   'tgl': DateTime.now(),
     // });
+
+    await getTransaction();
   }
 }
 

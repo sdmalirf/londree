@@ -202,6 +202,7 @@ class _adminTransactionPageState extends ConsumerState<adminTransactionPage> {
         child: FloatingActionButton(
           backgroundColor: Colors.white,
           onPressed: () async {
+            print(widget.data!.tid);
             try {
               await ref
                   .read(transactionControllerProvider.notifier)
@@ -481,8 +482,7 @@ class _adminTransactionPageState extends ConsumerState<adminTransactionPage> {
                                               ref.watch(authControllerProvider);
                                           widget.data =
                                               transaksiResult[rowIndex];
-                                          print(data.nama);
-                                          print(users.uid);
+                                          print(data.tid);
                                           print(data.berat);
                                           selectedRow = value!;
                                           selectedRowIndex = rowIndex;

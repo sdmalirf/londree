@@ -166,18 +166,17 @@ class _addPageState extends ConsumerState<addPage> {
                               await ref
                                   .read(transactionControllerProvider.notifier)
                                   .addTransaction(
-                                      context: context,
-                                      transactions: transaction,
-                                      oid: users.oid!);
+                                    context: context,
+                                    transactions: transaction,
+                                  );
                               setState(() {});
                               if (!mounted) return;
                               Snackbars().successSnackbars(context, 'Berhasil',
                                   'Berhasil Menambah Siswa');
-                              Navigator.pop(context);
                               // Navigator.pushReplacement(
                               //     context,
                               //     MaterialPageRoute(
-                              //         builder: (context) => bottomNavbar()));
+                              //         builder: (context) => adminNavbar()));
                             } on FirebaseException catch (e) {
                               Snackbars().failedSnackbars(
                                   context, 'Gagal', e.message.toString());

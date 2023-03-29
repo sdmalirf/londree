@@ -189,10 +189,10 @@ class _editPageState extends ConsumerState<editPage> {
                               await ref
                                   .read(transactionControllerProvider.notifier)
                                   .updateTransaction(
-                                      context: context,
-                                      transactions: transaction,
-                                      tid: widget.data!.tid.toString(),
-                                      oid: users.oid!);
+                                    context: context,
+                                    transactions: transaction,
+                                    tid: widget.data!.tid.toString(),
+                                  );
                               setState(() {});
                               if (!mounted) return;
                               Snackbars().successSnackbars(context, 'Berhasil',

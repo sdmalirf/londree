@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
 import 'package:londreeapp/model/transactions.dart';
@@ -91,7 +92,7 @@ class _transactionPageState extends ConsumerState<transactionPage> {
       if (status != PermissionStatus.granted) return;
 
       Directory? directory = await getExternalStorageDirectory();
-      String fileName = "DataTransaksi3.xlsx";
+      String fileName = "DataTransaksi.xlsx";
       String filePath =
           "${directory!.parent.parent.parent.parent.path}/Download/$fileName";
 
@@ -212,9 +213,16 @@ class _transactionPageState extends ConsumerState<transactionPage> {
                   .read(transactionControllerProvider.notifier)
                   .deleteTransaction(
                       context: context, tid: widget.data!.tid.toString());
+
               setState(() {});
               if (!mounted) {
-                return;
+                return showDialog(
+                    context: context,
+                    builder: (context) => Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: HexColor('4392A4'),
+                          ),
+                        ));
               }
               Snackbars().successSnackbars(
                   context, 'Berhasil', 'Berhasil Menghapus Data');

@@ -44,7 +44,7 @@ class AuthController extends StateNotifier<Users> {
       }
       if (!mounted) return;
       Snackbars().successSnackbars(
-          context, 'Berhasil Masuk', 'Selamat Datang di MySpp');
+          context, 'Berhasil Masuk', 'Selamat Datang di Londree');
       route(context);
 
       // .popUntil((route) => route.isFirst);
@@ -111,7 +111,7 @@ class AuthController extends StateNotifier<Users> {
       //   'tgl': DateTime.now(),
       // });
       // ignore: use_build_context_synchronously
-      route(context);
+      Navigator.pop(context);
       // ignore: use_build_context_synchronously
       // ignore: use_build_context_synchronously
       Snackbars()

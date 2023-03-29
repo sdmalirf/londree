@@ -4,8 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
 import 'package:londreeapp/model/transactions.dart';
+import 'package:londreeapp/view/Page/navbar/admin/logPage.dart';
 import 'package:londreeapp/view/component/favorite_box.dart';
 import 'package:londreeapp/view/component/future_box.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 class adminHome extends ConsumerStatefulWidget {
   const adminHome({super.key});
@@ -40,7 +42,9 @@ class _adminHomeState extends ConsumerState<adminHome> {
 
   Future<void> getAllTransaksi() async {
     final users = ref.watch(authControllerProvider);
-    await ref.read(transactionControllerProvider.notifier).getTransaction();
+    await ref
+        .read(transactionControllerProvider.notifier)
+        .getTransaction(oid: users.oid);
   }
 
   Future loadData() async {
@@ -75,7 +79,9 @@ class _adminHomeState extends ConsumerState<adminHome> {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                pushNewScreen(context, screen: logPage(), withNavBar: false);
+              },
               icon: SvgPicture.asset("assets/images/notifications-icon.svg")),
         ],
       ),
