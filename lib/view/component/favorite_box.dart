@@ -21,8 +21,8 @@ class _favoriteBoxState extends State<favoriteBox> {
           padding: EdgeInsets.only(left: 10, right: 10, bottom: 5),
           decoration: BoxDecoration(
               border: Border.all(
-                  width: 4, color: Color.fromARGB(255, 201, 201, 201)),
-              color: Color.fromARGB(255, 212, 223, 252),
+                  width: 2, color: Color.fromARGB(255, 53, 164, 255)),
+              color: Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(10)),
           child: Column(
             children: [

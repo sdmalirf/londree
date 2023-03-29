@@ -7,14 +7,14 @@ import 'package:londreeapp/model/transactions.dart';
 import 'package:londreeapp/view/component/favorite_box.dart';
 import 'package:londreeapp/view/component/future_box.dart';
 
-class home extends ConsumerStatefulWidget {
-  const home({super.key});
+class adminHome extends ConsumerStatefulWidget {
+  const adminHome({super.key});
 
   @override
-  ConsumerState<home> createState() => _homeState();
+  ConsumerState<adminHome> createState() => _adminHomeState();
 }
 
-class _homeState extends ConsumerState<home> {
+class _adminHomeState extends ConsumerState<adminHome> {
   bool selectedRow = false;
   int? selectedRowIndex;
   int? datapick;
@@ -75,16 +75,8 @@ class _homeState extends ConsumerState<home> {
         ),
         actions: [
           IconButton(
-              onPressed: () async {
-                await ref
-                    .read(authControllerProvider.notifier)
-                    .signOut(context);
-                setState(() {});
-              },
-              icon: SvgPicture.asset("assets/images/notifications-icon.svg")),
-          IconButton(
               onPressed: () {},
-              icon: SvgPicture.asset("assets/images/search-icon.svg")),
+              icon: SvgPicture.asset("assets/images/notifications-icon.svg")),
         ],
       ),
       body: ListView(
@@ -93,6 +85,14 @@ class _homeState extends ConsumerState<home> {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                "This Admin",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black26),
+              ),
+              Padding(padding: EdgeInsets.only(top: 10)),
               Text(
                 "Seluruh Pendaftaran",
                 style: TextStyle(
@@ -181,10 +181,11 @@ class _homeState extends ConsumerState<home> {
                     ),
                     TextButton(
                         onPressed: () {
+                          print(users.role);
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => home(),
+                                builder: (context) => adminHome(),
                               ));
                         },
                         child: Text("Semua pesanan"))
@@ -324,7 +325,7 @@ class _homeState extends ConsumerState<home> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => home(),
+                              builder: (context) => adminHome(),
                             ));
                       },
                       child: Container(

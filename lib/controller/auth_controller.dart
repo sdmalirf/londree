@@ -7,6 +7,8 @@ import 'package:londreeapp/model/users.dart';
 import 'package:londreeapp/view/Page/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:londreeapp/view/Page/navbar/admin/admin_navbar.dart';
+import 'package:londreeapp/view/Page/navbar/kasir/kasir_navbar.dart';
+import 'package:londreeapp/view/Page/navbar/owner/owner_navbar.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
 import 'package:londreeapp/view/Page/auth/login.dart';
 import 'package:londreeapp/view/Page/auth/started.dart';
@@ -43,8 +45,7 @@ class AuthController extends StateNotifier<Users> {
       if (!mounted) return;
       Snackbars().successSnackbars(
           context, 'Berhasil Masuk', 'Selamat Datang di MySpp');
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => bottomNavbar()));
+      route(context);
 
       // .popUntil((route) => route.isFirst);
       // route(context);
@@ -110,8 +111,7 @@ class AuthController extends StateNotifier<Users> {
       //   'tgl': DateTime.now(),
       // });
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => bottomNavbar()));
+      route(context);
       // ignore: use_build_context_synchronously
       // ignore: use_build_context_synchronously
       Snackbars()
@@ -124,6 +124,50 @@ class AuthController extends StateNotifier<Users> {
     // await app.delete();
 
     // return Future.sync(() => FirebaseAuth.instanceFor(app: app));
+  }
+
+  void route(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    // ignore: unused_local_variable
+    var kk = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        if (documentSnapshot.get('role') == "Admin") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const adminNavbar(),
+            ),
+          );
+        } else if (documentSnapshot.get('role') == "Kasir") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const kasirNavbar(),
+            ),
+          );
+        } else if (documentSnapshot.get('role') == "Owner") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ownerNavbar(),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => login(),
+            ),
+          );
+        }
+      } else {
+        return;
+      }
+    });
   }
 
 //   // Future<void> addUserToFirestore(String uid, String name, String email) async {
@@ -177,7 +221,7 @@ class AuthController extends StateNotifier<Users> {
 //           // // Navigator.pushReplacement(
 //           // //   context,
 //           // //   MaterialPageRoute(
-//           // //     builder: (context) => bottomNavbar(),
+//           // //     builder: (context) => adminNavbar(),
 //           // //   ),
 //           // // );
 //         }

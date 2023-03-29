@@ -5,30 +5,30 @@ import 'package:londreeapp/view/component/chip_list.dart';
 import 'package:londreeapp/view/component/container_information.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
-class informationPage extends StatefulWidget {
-  const informationPage({super.key});
+class ownerInformation extends StatefulWidget {
+  const ownerInformation({super.key});
 
   @override
-  State<informationPage> createState() => _informationPageState();
+  State<ownerInformation> createState() => _ownerInformationState();
 }
 
-class _informationPageState extends State<informationPage> {
+class _ownerInformationState extends State<ownerInformation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton.extended(
-            foregroundColor: Colors.blue,
-            backgroundColor: Color.fromARGB(255, 255, 255, 255),
-            label: Text(
-              "Pengguna",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-            ),
-            icon: SvgPicture.asset("assets/images/people-icon.svg"),
-            onPressed: () {
-              pushNewScreen(context,
-                  screen: addPenggunaPage(), withNavBar: false);
-            }),
+        // floatingActionButton: FloatingActionButton.extended(
+        //     foregroundColor: Colors.blue,
+        //     backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        //     label: Text(
+        //       "Pengguna",
+        //       style:
+        //           TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+        //     ),
+        //     icon: SvgPicture.asset("assets/images/people-icon.svg"),
+        //     onPressed: () {
+        //       pushNewScreen(context,
+        //           screen: addPenggunaPage(), withNavBar: false);
+        //     }),
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,

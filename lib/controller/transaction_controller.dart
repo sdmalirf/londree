@@ -10,14 +10,8 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
 
   final db = FirebaseFirestore.instance.collection('transactions');
 
-  Future<void> getTransaction(
-      // required String uid
-      ) async {
-    var checkTransactions = await db
-        // .where(
-        //   'tid', isEqualTo: uid
-        //   )
-        .get();
+  Future<void> getTransaction({String? oid}) async {
+    var checkTransactions = await db.where('oid', isEqualTo: oid).get();
     print(checkTransactions);
 
     List<Transactions> transactions = checkTransactions.docs
@@ -26,11 +20,10 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     state = transactions;
   }
 
-  Future<void> addTransaction({
-    required BuildContext context,
-    required Transactions transactions,
-    // required String uid
-  }) async {
+  Future<void> addTransaction(
+      {required BuildContext context,
+      required Transactions transactions,
+      required String oid}) async {
     final doc = db.doc();
     showDialog(
         context: context,
@@ -44,24 +37,23 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     await doc.set(temp.toJson());
 
     final auth = FirebaseAuth.instance;
-    // final dbLog = FirebaseFirestore.instance.collection('log_history');
-    // final docID = dbLog.doc();
-    // await docID.set({
-    //   'log_id': docID.id,
-    //   'aktivitas': 'Menambah siswa',
-    //   'email': auth.currentUser!.email,
-    //   'tgl': DateTime.now(),
-    // });
+    final dbLog = FirebaseFirestore.instance.collection('logHistory');
+    final doclog = dbLog.doc();
+    await doclog.set({
+      'logId': doclog.id,
+      'aktivitas': 'Menambah Transaksi',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
 
-    await getTransaction(
-        // uid: uid
-        );
+    await getTransaction(oid: oid);
   }
 
   Future<void> updateTransaction(
       {required BuildContext context,
       required Transactions transactions,
-      required String tid}) async {
+      required String tid,
+      required String oid}) async {
     final doc = db.doc(tid);
     Transactions temp = transactions.copyWith(tid: doc.id);
     showDialog(
@@ -73,6 +65,15 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
             ));
     await doc.update(temp.toJson());
     final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('logHistory');
+    final doclog = dbLog.doc();
+    await doclog.set({
+      'logId': doclog.id,
+      'aktivitas': 'Mengubah Transaksi',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
+
     // final dbLog = FirebaseFirestore.instance.collection('log_history');
     // final docID = dbLog.doc();
     // await docID.set({
@@ -81,7 +82,7 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     //   'email': auth.currentUser!.email,
     //   'tgl': DateTime.now(),
     // });
-    await getTransaction();
+    await getTransaction(oid: oid);
   }
 
   Future<void> deleteTransaction(
@@ -96,6 +97,14 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
             ));
     await doc.delete();
     final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('logHistory');
+    final doclog = dbLog.doc();
+    await doclog.set({
+      'logId': doclog.id,
+      'aktivitas': 'Menghapus Transaksi',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
     // final dbLog = FirebaseFirestore.instance.collection('log_history');
     // final docID = dbLog.doc();
     // await docID.set({
@@ -104,7 +113,6 @@ class TransactionsController extends StateNotifier<List<Transactions>> {
     //   'email': auth.currentUser!.email,
     //   'tgl': DateTime.now(),
     // });
-    await getTransaction();
   }
 }
 

@@ -34,6 +34,14 @@ class MemberController extends StateNotifier<List<Members>> {
     await doc.set(temp.toJson());
 
     final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('logHistory');
+    final doclog = dbLog.doc();
+    await doclog.set({
+      'logId': doclog.id,
+      'aktivitas': 'Menambah Member',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
     // final dbLog = FirebaseFirestore.instance.collection('log_history');
     // final docID = dbLog.doc();
     // await docID.set({
@@ -61,6 +69,14 @@ class MemberController extends StateNotifier<List<Members>> {
             ));
     await doc.update(temp.toJson());
     final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('logHistory');
+    final doclog = dbLog.doc();
+    await doclog.set({
+      'logId': doclog.id,
+      'aktivitas': 'Menambah Member',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
     // final dbLog = FirebaseFirestore.instance.collection('log_history');
     // final docID = dbLog.doc();
     // await docID.set({
@@ -84,6 +100,14 @@ class MemberController extends StateNotifier<List<Members>> {
             ));
     await doc.delete();
     final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('logHistory');
+    final doclog = dbLog.doc();
+    await doclog.set({
+      'logId': doclog.id,
+      'aktivitas': 'Menambah Member',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
     // final dbLog = FirebaseFirestore.instance.collection('log_history');
     // final docID = dbLog.doc();
     // await docID.set({

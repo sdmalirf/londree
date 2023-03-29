@@ -14,8 +14,9 @@ class informationBox extends StatefulWidget {
   final String picture;
   final String desc;
   final String desc2;
+  final Color colors;
 
-  const informationBox(
+  informationBox(
       {super.key,
       required this.pt,
       required this.pb,
@@ -26,7 +27,8 @@ class informationBox extends StatefulWidget {
       required this.label,
       required this.picture,
       required this.desc,
-      required this.desc2});
+      required this.desc2,
+      required this.colors});
 
   @override
   State<informationBox> createState() => _informationBoxState();
@@ -45,8 +47,7 @@ class _informationBoxState extends State<informationBox> {
       height: MediaQuery.of(context).size.height * widget.heightBox,
       decoration: BoxDecoration(
           color: Colors.white,
-          border:
-              Border.all(width: 3, color: Color.fromARGB(255, 228, 228, 228)),
+          border: Border.all(width: 3, color: widget.colors),
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [

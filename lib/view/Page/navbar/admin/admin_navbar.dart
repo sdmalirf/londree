@@ -2,22 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/view/Page/home.dart';
 import 'package:londreeapp/view/Page/information.dart';
+import 'package:londreeapp/view/Page/navbar/admin/admin_home.dart';
+import 'package:londreeapp/view/Page/navbar/admin/admin_information.dart';
+import 'package:londreeapp/view/Page/navbar/admin/transaction.dart';
 import 'package:londreeapp/view/Page/profile.dart';
 import 'package:londreeapp/view/Page/transactions/transaction.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
-class bottomNavbar extends StatefulWidget {
-  const bottomNavbar({super.key});
+class adminNavbar extends StatefulWidget {
+  const adminNavbar({super.key});
 
   @override
-  State<bottomNavbar> createState() => _bottomNavbarState();
+  State<adminNavbar> createState() => _adminNavbarState();
 }
 
-class _bottomNavbarState extends State<bottomNavbar> {
+class _adminNavbarState extends State<adminNavbar> {
   final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
   List<Widget> _buildScreen() {
-    return [home(), informationPage(), transactionPage(), profilePage()];
+    return [
+      adminHome(),
+      adminInformation(),
+      adminTransactionPage(),
+      profilePage()
+    ];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

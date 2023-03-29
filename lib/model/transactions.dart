@@ -1,6 +1,7 @@
 class Transactions {
   String? tid;
   String? uid;
+  String? oid;
   String? nama;
   String? berat;
   String? total;
@@ -8,6 +9,7 @@ class Transactions {
   Transactions({
     this.tid,
     this.uid,
+    this.oid,
     this.nama,
     this.berat,
     this.total,
@@ -17,6 +19,7 @@ class Transactions {
     return Transactions(
       tid: fromJson['tid'],
       uid: fromJson['uid'],
+      oid: fromJson['oid'],
       nama: fromJson['nama'],
       berat: fromJson['berat'],
       total: fromJson['total'],
@@ -26,7 +29,8 @@ class Transactions {
   Map<String, dynamic> toJson() {
     return {
       'tid': tid,
-      'tid': uid,
+      'uid': uid,
+      'oid': oid,
       'nama': nama,
       'berat': berat,
       'total': total,
@@ -36,6 +40,7 @@ class Transactions {
   Transactions copyWith({
     String? tid,
     String? uid,
+    String? oid,
     String? nama,
     String? berat,
     String? total,
@@ -43,6 +48,7 @@ class Transactions {
     return Transactions(
       tid: tid ?? this.tid,
       uid: uid ?? this.uid,
+      oid: oid ?? this.oid,
       nama: nama ?? this.nama,
       berat: berat ?? this.berat,
       total: total ?? this.total,

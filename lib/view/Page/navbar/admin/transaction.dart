@@ -21,15 +21,16 @@ import 'package:open_file/open_file.dart';
 import 'package:excel/excel.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
-class transactionPage extends ConsumerStatefulWidget {
+class adminTransactionPage extends ConsumerStatefulWidget {
   Transactions? data;
-  transactionPage({super.key, this.data});
+  adminTransactionPage({super.key, this.data});
 
   @override
-  ConsumerState<transactionPage> createState() => _transactionPageState();
+  ConsumerState<adminTransactionPage> createState() =>
+      _adminTransactionPageState();
 }
 
-class _transactionPageState extends ConsumerState<transactionPage> {
+class _adminTransactionPageState extends ConsumerState<adminTransactionPage> {
   TextEditingController nama = TextEditingController();
   TextEditingController berat = TextEditingController();
   TextEditingController total = TextEditingController();
@@ -58,9 +59,7 @@ class _transactionPageState extends ConsumerState<transactionPage> {
 
   Future<void> getAllTransaksi() async {
     final users = ref.watch(authControllerProvider);
-    await ref
-        .read(transactionControllerProvider.notifier)
-        .getTransaction(oid: users.oid!);
+    await ref.read(transactionControllerProvider.notifier).getTransaction();
   }
 
   Future loadData() async {
@@ -84,27 +83,23 @@ class _transactionPageState extends ConsumerState<transactionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final users = ref.watch(authControllerProvider);
     final db = FirebaseFirestore.instance;
     Future exportOfficerToExcel() async {
       PermissionStatus status = await Permission.storage.request();
       if (status != PermissionStatus.granted) return;
 
       Directory? directory = await getExternalStorageDirectory();
-      String fileName = "DataTransaksi3.xlsx";
+      String fileName = "DataTransaksi2.xlsx";
       String filePath =
           "${directory!.parent.parent.parent.parent.path}/Download/$fileName";
 
       try {
-        QuerySnapshot querySnapshot = await db
-            .collection('transactions')
-            .where('oid', isEqualTo: users.oid)
-            .get();
+        QuerySnapshot querySnapshot = await db.collection('transactions').get();
         var workbook = Excel.createExcel();
         var sheet = workbook['Sheet1'];
         // Add headers to worksheet
         sheet.appendRow([
-          'ID',
+          'tid',
           'nama',
           'berat',
           'total',
@@ -516,7 +511,7 @@ class _transactionPageState extends ConsumerState<transactionPage> {
                                           SizedBox(
                                               width: 50,
                                               child: Text(
-                                                "nama",
+                                                "-",
                                                 style: TextStyle(
                                                     color: Colors.black),
                                               )),

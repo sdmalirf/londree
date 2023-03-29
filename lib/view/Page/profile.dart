@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
 import 'package:londreeapp/view/component/custom_input.dart';
 
-class customButtonProfile extends StatelessWidget {
+class customButtonProfile extends ConsumerStatefulWidget {
   final String title;
   final color;
   final textcolor;
@@ -19,16 +21,19 @@ class customButtonProfile extends StatelessWidget {
       this.icon});
 
   @override
+  ConsumerState<customButtonProfile> createState() =>
+      _customButtonProfileState();
+}
+
+class _customButtonProfileState extends ConsumerState<customButtonProfile> {
+  @override
   Widget build(BuildContext context) {
     return Expanded(
       child: RawMaterialButton(
-        fillColor: color,
-        onPressed: () {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => link,
-          //     ));
+        fillColor: widget.color,
+        onPressed: () async {
+          await ref.read(authControllerProvider.notifier).signOut(context);
+          setState(() {});
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Padding(
@@ -37,13 +42,13 @@ class customButtonProfile extends StatelessWidget {
             // mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(child: SvgPicture.asset(icon!)),
+              Container(child: SvgPicture.asset(widget.icon!)),
               Padding(padding: EdgeInsets.symmetric(horizontal: 4)),
               Center(
                 child: Text(
-                  title,
+                  widget.title,
                   style: TextStyle(
-                      color: textcolor,
+                      color: widget.textcolor,
                       fontSize: 14,
                       fontWeight: FontWeight.w600),
                 ),
@@ -114,6 +119,7 @@ class _profilePageState extends State<profilePage> {
                     ),
                   ),
                   TextFormField(
+                    readOnly: true,
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -136,6 +142,7 @@ class _profilePageState extends State<profilePage> {
                     ),
                   ),
                   TextFormField(
+                    readOnly: true,
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -158,6 +165,7 @@ class _profilePageState extends State<profilePage> {
                     ),
                   ),
                   TextFormField(
+                    readOnly: true,
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -180,6 +188,7 @@ class _profilePageState extends State<profilePage> {
                     ),
                   ),
                   TextFormField(
+                    readOnly: true,
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),

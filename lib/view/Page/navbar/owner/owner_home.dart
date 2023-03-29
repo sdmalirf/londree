@@ -7,14 +7,14 @@ import 'package:londreeapp/model/transactions.dart';
 import 'package:londreeapp/view/component/favorite_box.dart';
 import 'package:londreeapp/view/component/future_box.dart';
 
-class home extends ConsumerStatefulWidget {
-  const home({super.key});
+class ownerHome extends ConsumerStatefulWidget {
+  const ownerHome({super.key});
 
   @override
-  ConsumerState<home> createState() => _homeState();
+  ConsumerState<ownerHome> createState() => _ownerHomeState();
 }
 
-class _homeState extends ConsumerState<home> {
+class _ownerHomeState extends ConsumerState<ownerHome> {
   bool selectedRow = false;
   int? selectedRowIndex;
   int? datapick;
@@ -40,7 +40,9 @@ class _homeState extends ConsumerState<home> {
 
   Future<void> getAllTransaksi() async {
     final users = ref.watch(authControllerProvider);
-    await ref.read(transactionControllerProvider.notifier).getTransaction();
+    await ref
+        .read(transactionControllerProvider.notifier)
+        .getTransaction(oid: users.oid!);
   }
 
   Future loadData() async {
@@ -82,9 +84,6 @@ class _homeState extends ConsumerState<home> {
                 setState(() {});
               },
               icon: SvgPicture.asset("assets/images/notifications-icon.svg")),
-          IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset("assets/images/search-icon.svg")),
         ],
       ),
       body: ListView(
@@ -93,6 +92,14 @@ class _homeState extends ConsumerState<home> {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                "This Owner",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black26),
+              ),
+              Padding(padding: EdgeInsets.only(top: 10)),
               Text(
                 "Seluruh Pendaftaran",
                 style: TextStyle(
@@ -184,7 +191,7 @@ class _homeState extends ConsumerState<home> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => home(),
+                                builder: (context) => ownerHome(),
                               ));
                         },
                         child: Text("Semua pesanan"))
@@ -324,7 +331,7 @@ class _homeState extends ConsumerState<home> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => home(),
+                              builder: (context) => ownerHome(),
                             ));
                       },
                       child: Container(

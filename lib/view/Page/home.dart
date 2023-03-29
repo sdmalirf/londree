@@ -40,7 +40,9 @@ class _homeState extends ConsumerState<home> {
 
   Future<void> getAllTransaksi() async {
     final users = ref.watch(authControllerProvider);
-    await ref.read(transactionControllerProvider.notifier).getTransaction();
+    await ref
+        .read(transactionControllerProvider.notifier)
+        .getTransaction(oid: users.oid!);
   }
 
   Future loadData() async {
@@ -82,9 +84,6 @@ class _homeState extends ConsumerState<home> {
                 setState(() {});
               },
               icon: SvgPicture.asset("assets/images/notifications-icon.svg")),
-          IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset("assets/images/search-icon.svg")),
         ],
       ),
       body: ListView(

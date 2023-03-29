@@ -3,9 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
 import 'package:londreeapp/model/transactions.dart';
-import 'package:londreeapp/view/page/home/bottom_navbar.dart';
+import 'package:londreeapp/view/page/navbar/admin/admin_navbar.dart';
 import 'package:londreeapp/view/component/custom_button.dart';
 import 'package:londreeapp/view/component/snackbar.dart';
 import 'package:londreeapp/view/component/custom_input.dart';
@@ -180,6 +181,7 @@ class _editPageState extends ConsumerState<editPage> {
                           textcolor: Colors.white,
                           press: () async {
                             try {
+                              final users = ref.watch(authControllerProvider);
                               Transactions transaction = Transactions(
                                   nama: _nama.text,
                                   berat: _berat.text,
@@ -189,7 +191,8 @@ class _editPageState extends ConsumerState<editPage> {
                                   .updateTransaction(
                                       context: context,
                                       transactions: transaction,
-                                      tid: widget.data!.tid.toString());
+                                      tid: widget.data!.tid.toString(),
+                                      oid: users.oid!);
                               setState(() {});
                               if (!mounted) return;
                               Snackbars().successSnackbars(context, 'Berhasil',
@@ -222,7 +225,7 @@ class _editPageState extends ConsumerState<editPage> {
 // import 'package:flutter/material.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:londreeapp/view/Page/information.dart';
-// import 'package:londreeapp/view/page/home/bottom_navbar.dart';
+// import 'package:londreeapp/view/page/navbar/admin/admin_navbar.dart';
 // import 'package:londreeapp/view/component/custom_button.dart';
 
 // class editInput extends StatelessWidget {

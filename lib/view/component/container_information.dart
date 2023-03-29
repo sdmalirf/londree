@@ -31,6 +31,7 @@ class _informationContainerState extends ConsumerState<informationContainer> {
             Column(
               children: [
                 informationBox(
+                    colors: Color.fromARGB(255, 228, 228, 228),
                     sizeBox: 0.46,
                     heightBox: 0.12,
                     pt: 10,
@@ -42,6 +43,7 @@ class _informationContainerState extends ConsumerState<informationContainer> {
                     desc: "Rp.",
                     desc2: "7.439.323"),
                 informationBox(
+                    colors: Color.fromARGB(255, 228, 228, 228),
                     sizeBox: 0.46,
                     heightBox: 0.16,
                     pt: 10,
@@ -59,6 +61,7 @@ class _informationContainerState extends ConsumerState<informationContainer> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 informationBox(
+                    colors: Color.fromARGB(255, 228, 228, 228),
                     sizeBox: 0.35,
                     heightBox: 0.15,
                     pt: 10,
@@ -70,6 +73,7 @@ class _informationContainerState extends ConsumerState<informationContainer> {
                     desc: "",
                     desc2: "189"),
                 informationBox(
+                    colors: Color.fromARGB(255, 228, 228, 228),
                     sizeBox: 0.35,
                     heightBox: 0.13,
                     pt: 10,

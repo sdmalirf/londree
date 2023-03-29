@@ -4,17 +4,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:londreeapp/controller/auth_controller.dart';
 import 'package:londreeapp/controller/transaction_controller.dart';
 import 'package:londreeapp/model/transactions.dart';
+import 'package:londreeapp/view/Page/member/member.dart';
+import 'package:londreeapp/view/Page/outlet/outlet.dart';
+import 'package:londreeapp/view/Page/paket/paket.dart';
 import 'package:londreeapp/view/component/favorite_box.dart';
 import 'package:londreeapp/view/component/future_box.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
-class home extends ConsumerStatefulWidget {
-  const home({super.key});
+class kasirHome extends ConsumerStatefulWidget {
+  const kasirHome({super.key});
 
   @override
-  ConsumerState<home> createState() => _homeState();
+  ConsumerState<kasirHome> createState() => _kasirHomeState();
 }
 
-class _homeState extends ConsumerState<home> {
+class _kasirHomeState extends ConsumerState<kasirHome> {
   bool selectedRow = false;
   int? selectedRowIndex;
   int? datapick;
@@ -40,7 +44,9 @@ class _homeState extends ConsumerState<home> {
 
   Future<void> getAllTransaksi() async {
     final users = ref.watch(authControllerProvider);
-    await ref.read(transactionControllerProvider.notifier).getTransaction();
+    await ref
+        .read(transactionControllerProvider.notifier)
+        .getTransaction(oid: users.oid!);
   }
 
   Future loadData() async {
@@ -82,9 +88,6 @@ class _homeState extends ConsumerState<home> {
                 setState(() {});
               },
               icon: SvgPicture.asset("assets/images/notifications-icon.svg")),
-          IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset("assets/images/search-icon.svg")),
         ],
       ),
       body: ListView(
@@ -93,6 +96,14 @@ class _homeState extends ConsumerState<home> {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                "This Kasir",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black26),
+              ),
+              Padding(padding: EdgeInsets.only(top: 10)),
               Text(
                 "Seluruh Pendaftaran",
                 style: TextStyle(
@@ -158,7 +169,53 @@ class _homeState extends ConsumerState<home> {
               ),
             ]),
           ),
-          futureBox(),
+          Stack(children: [
+            Positioned(
+                top: 0,
+                child: Container(
+                  width: 400,
+                  height: 80,
+                  decoration:
+                      BoxDecoration(color: Color.fromARGB(255, 250, 250, 250)),
+                )),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                  margin: EdgeInsets.only(top: 30),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 253, 254, 255),
+                  ),
+                  padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 8, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                pushNewScreen(context,
+                                    screen: memberPage(), withNavBar: false);
+                              },
+                              icon: SvgPicture.asset(
+                                  "assets/images/people-icon.svg")),
+                          Text("Pelanggan")
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          IconButton(
+                              onPressed: () {},
+                              icon: SvgPicture.asset(
+                                  "assets/images/bill-icon.svg")),
+                          Text("Transaksi")
+                        ],
+                      )
+                    ],
+                  )),
+            ),
+          ]),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             child: Column(
@@ -184,7 +241,7 @@ class _homeState extends ConsumerState<home> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => home(),
+                                builder: (context) => kasirHome(),
                               ));
                         },
                         child: Text("Semua pesanan"))
@@ -324,7 +381,7 @@ class _homeState extends ConsumerState<home> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => home(),
+                              builder: (context) => kasirHome(),
                             ));
                       },
                       child: Container(

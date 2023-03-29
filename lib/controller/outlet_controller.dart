@@ -33,6 +33,14 @@ class OutletController extends StateNotifier<List<Outlets>> {
     await doc.set(temp.toJson());
 
     final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('logHistory');
+    final doclog = dbLog.doc();
+    await doclog.set({
+      'logId': doclog.id,
+      'aktivitas': 'Menambah outlet',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
     // final dbLog = FirebaseFirestore.instance.collection('log_history');
     // final docID = dbLog.doc();
     // await docID.set({
@@ -60,6 +68,14 @@ class OutletController extends StateNotifier<List<Outlets>> {
             ));
     await doc.update(temp.toJson());
     final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('logHistory');
+    final doclog = dbLog.doc();
+    await doclog.set({
+      'logId': doclog.id,
+      'aktivitas': 'Menambah outlet',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
     // final dbLog = FirebaseFirestore.instance.collection('log_history');
     // final docID = dbLog.doc();
     // await docID.set({
@@ -83,6 +99,14 @@ class OutletController extends StateNotifier<List<Outlets>> {
             ));
     await doc.delete();
     final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('logHistory');
+    final doclog = dbLog.doc();
+    await doclog.set({
+      'logId': doclog.id,
+      'aktivitas': 'Menambah outlet',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
     // final dbLog = FirebaseFirestore.instance.collection('log_history');
     // final docID = dbLog.doc();
     // await docID.set({
